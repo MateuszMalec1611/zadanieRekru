@@ -1,6 +1,9 @@
 import { Col, Container, ListGroup, Row } from 'react-bootstrap';
 import PageTitle from 'src/components/PageTitle/PageTitle';
 import Product from 'src/components/Product/Product';
+import { useApp } from 'src/hooks/useApp';
+import { useProducts } from 'src/hooks/useProducts';
+
 
 const DUMMY_DATA = [
     {
@@ -26,14 +29,31 @@ const DUMMY_DATA = [
 ];
 
 const ProductsList = () => {
-    const products = DUMMY_DATA.map((p, i) => <Product key={i} product={p} />);
+    const {
+        appState: { loading },
+    } = useApp();
+    const {
+        productsState: { products },
+    } = useProducts();
+
+    const productsList = DUMMY_DATA.map((p, i) => <Product key={i} product={p} />);
 
     return (
         <Container>
             <PageTitle>Lista produktów</PageTitle>
             <Row>
                 <Col className="d-flex justify-content-center">
-                    <ListGroup style={{ width: 500 }}>{products}</ListGroup>
+                    {loading ? (
+                        <p>loading</p>
+                    ) : (
+                        <ListGroup style={{ width: 500 }}>
+                            {products.length === 0 ? (
+                                <p>Nie ma zadnego produktu dostępnego</p>
+                            ) : (
+                                productsList
+                            )}
+                        </ListGroup>
+                    )}
                 </Col>
             </Row>
         </Container>

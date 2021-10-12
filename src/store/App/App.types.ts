@@ -15,7 +15,7 @@ export type Loading = {
 };
 
 export type Error = {
-    type: AppActionType.LOADING;
+    type: AppActionType.ERROR;
     payload: {
         error: boolean;
         errorMessage: string;
