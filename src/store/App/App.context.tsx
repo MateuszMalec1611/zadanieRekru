@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useReducer } from 'react';
+import { prepareProductsData } from 'src/utils/prepareProductsData';
 import { fetchCategories } from '../Categories/Categories.services';
 import { fetchProducts } from '../Products/Products.services';
 import { AppActions, AppActionType, AppState, ProviderValue } from './App.types';
@@ -30,14 +31,13 @@ const AppProvider: React.FC = ({ children }) => {
     const getProductsAndCategories = async () => {
         try {
             appDispatch({ type: AppActionType.LOADING, payload: true });
-            
 
             const { data: products } = await fetchProducts();
             const { data: categories } = await fetchCategories();
 
+            const productsList = prepareProductsData(products, categories);
 
-            console.log(products);
-            console.log(categories);
+
         } catch (err) {
             alert(err);
         } finally {

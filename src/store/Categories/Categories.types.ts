@@ -12,6 +12,14 @@ export type GetCategories = {
     payload: string[];
 };
 
+export type Category = {
+    id: number;
+    name: string;
+    status: string;
+    uid: string;
+    updated_at: string;
+};
+
 export type CategoriesActions = GetCategories;
 
 export enum CategoriesActionType {
