@@ -1,6 +1,12 @@
+import { Container } from 'react-bootstrap';
+import PageTitle from 'src/components/PageTitle/PageTitle';
 
 const NoMatch = () => {
-    return ( <h1>No match</h1> );
-}
- 
+    return (
+        <Container>
+            <PageTitle>Strona nie odnaleziona</PageTitle>
+        </Container>
+    );
+};
+
 export default NoMatch;
