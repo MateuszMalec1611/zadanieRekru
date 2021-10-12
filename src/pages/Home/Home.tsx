@@ -1,5 +1,12 @@
+import { Container } from 'react-bootstrap';
+import PageTitle from 'src/components/PageTitle/PageTitle';
+
 const Home = () => {
-    return <h1>home</h1>;
+    return (
+        <Container>
+            <PageTitle>Zadanie Rekrutacyjne</PageTitle>
+        </Container>
+    );
 };
 
 export default Home;
