@@ -17,8 +17,8 @@ const App = () => {
                 <Route component={Home} exact path="/" />
                 <Route component={ProductsList} path="/products-list" />
                 <Route component={ProductCategories} path="/product-categories" />
-                <Route component={EditProduct} path="/edit-product" />
-                <Route component={EditCategory} path="/edit-category" />
+                <Route component={EditProduct} path="/edit-product/:id" />
+                <Route component={EditCategory} path="/edit-category/:id" />
                 <Route component={AddProduct} path="/add-product" />
                 <Route component={AddCategory} path="/add-category" />
                 <Route component={NoMatch} />
