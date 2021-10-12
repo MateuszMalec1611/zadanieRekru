@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { Col, Container, ListGroup, Row } from 'react-bootstrap';
 import PageTitle from 'src/components/PageTitle/PageTitle';
 import Product from 'src/components/Product/Product';
+import { fetchProducts } from 'src/store/Products/Products.services';
 
 const DUMMY_DATA = [
     {
@@ -27,6 +29,15 @@ const DUMMY_DATA = [
 
 const ProductsList = () => {
     const products = DUMMY_DATA.map((p, i) => <Product key={i} product={p} />);
+
+    const getProducts = async () => {
+        const { data } = await fetchProducts();
+        console.log(data);
+    };
+
+    useEffect(() => {
+        getProducts();
+    }, []);
 
     return (
         <Container>
