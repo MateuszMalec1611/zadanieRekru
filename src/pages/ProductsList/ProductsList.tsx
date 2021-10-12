@@ -1,4 +1,5 @@
 import { Col, Container, ListGroup, Row } from 'react-bootstrap';
+import PageTitle from 'src/components/PageTitle/PageTitle';
 import Product from 'src/components/Product/Product';
 
 const DUMMY_DATA = [
@@ -29,11 +30,7 @@ const ProductsList = () => {
 
     return (
         <Container>
-            <Row>
-                <Col className="d-flex justify-content-center">
-                    <h1 className="m-10">Lista Produktów</h1>
-                </Col>
-            </Row>
+            <PageTitle>Lista produktów</PageTitle>
             <Row>
                 <Col className="d-flex justify-content-center">
                     <ListGroup style={{ width: 500 }}>{products}</ListGroup>

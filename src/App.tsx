@@ -1,12 +1,14 @@
 import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import NoMatch from './pages/NoMatch/NoMatch';
+import Layout from './components/Layout/Layout';
 import Home from './pages/Home/Home';
 import ProductsList from './pages/ProductsList/ProductsList';
 import ProductCategories from './pages/ProductCategories/ProductCategories';
 import EditProduct from './pages/EditProduct/EditProduct';
 import EditCategory from './pages/EditCategory/EditCategory';
-import Layout from './components/Layout/Layout';
+import AddCategory from './pages/AddCategory/AddCategory';
+import AddProduct from './pages/AddProduct/AddProduct';
 
 const App = () => {
     return (
@@ -17,8 +19,8 @@ const App = () => {
                 <Route component={ProductCategories} path="/product-categories" />
                 <Route component={EditProduct} path="/edit-product" />
                 <Route component={EditCategory} path="/edit-category" />
-                <Route path="/add-product" />
-                <Route path="/add-category" />
+                <Route component={AddProduct} path="/add-product" />
+                <Route component={AddCategory} path="/add-category" />
                 <Route component={NoMatch} />
             </Switch>
         </Layout>

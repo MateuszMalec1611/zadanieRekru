@@ -1,5 +1,6 @@
 import { Col, Container, ListGroup, Row } from 'react-bootstrap';
 import Category from 'src/components/Category/Category';
+import PageTitle from 'src/components/PageTitle/PageTitle';
 
 const DUMMY_DATA = [
     {
@@ -18,11 +19,7 @@ const ProductCategories = () => {
 
     return (
         <Container>
-            <Row>
-                <Col className="d-flex justify-content-center">
-                    <h1 className="m-10">Lista Kategori</h1>
-                </Col>
-            </Row>
+            <PageTitle>Lista kategorii</PageTitle>
             <Row>
                 <Col className="d-flex justify-content-center">
                     <ListGroup style={{ width: 500 }}>{categories}</ListGroup>
