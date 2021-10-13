@@ -7,6 +7,7 @@ import PageTitle from 'src/components/PageTitle/PageTitle';
 import { useApp } from 'src/hooks/useApp';
 import { AppActionType } from 'src/store/App/App.types';
 import { useProducts } from 'src/hooks/useProducts';
+import { Product } from 'src/store/Products/Products.types';
 
 type ParamsProps = {
     id: string;
@@ -19,18 +20,23 @@ const EditProduct = () => {
         appDispatch,
         appState: { loading },
     } = useApp();
-    const {
-        productsState: { products },
-    } = useProducts();
-    const { id } = useParams<ParamsProps>();
 
-    const getProduct = () => {
-        products.forEach(product => {
-            if (product.id === +id) {
-                setProductName(product.name);
-                // setCategoryName(product.category_name);
-            }
-        });
+    const { id } = useParams<ParamsProps>();
+    const productId = +id;
+
+    const getProduct = async () => {
+        try {
+            appDispatch({ type: AppActionType.LOADING, payload: true });
+
+            const { data } = await fetchProduct(productId);
+            const product: Product = data;
+            
+            setProductName(product.name);
+        } catch (err) {
+            alert(err);
+        } finally {
+            appDispatch({ type: AppActionType.LOADING, payload: false });
+        }
     };
 
     const handleNameInput = ({ target }: React.ChangeEvent<HTMLInputElement>) =>
@@ -39,8 +45,8 @@ const EditProduct = () => {
         setCategoryName(target.value);
 
     useEffect(() => {
-        if (products.length !== 0) getProduct();
-    }, [loading]);
+        getProduct();
+    }, []);
 
     return (
         <Container>
