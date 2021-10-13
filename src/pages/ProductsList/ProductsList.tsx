@@ -4,7 +4,6 @@ import Product from 'src/components/Product/Product';
 import { useApp } from 'src/hooks/useApp';
 import { useProducts } from 'src/hooks/useProducts';
 
-
 const DUMMY_DATA = [
     {
         name: 'schabowy',
@@ -36,7 +35,9 @@ const ProductsList = () => {
         productsState: { products },
     } = useProducts();
 
-    const productsList = DUMMY_DATA.map((p, i) => <Product key={i} product={p} />);
+    const productsList = products.map(product => (
+        <Product key={product.uid} product={product} />
+    ));
 
     return (
         <Container>
