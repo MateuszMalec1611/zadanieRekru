@@ -7,6 +7,7 @@ export interface AppState {
     loading: boolean;
     error: boolean;
     errorMessage: string;
+    updateApp: boolean;
 }
 
 export type Loading = {
@@ -22,9 +23,15 @@ export type Error = {
     };
 };
 
-export type AppActions = Loading | Error;
+export type UpdateApp = {
+    type: AppActionType.UPDATE_APP;
+    payload: boolean;
+};
+
+export type AppActions = Loading | Error | UpdateApp;
 
 export enum AppActionType {
     LOADING = 'LOADING',
     ERROR = 'ERROR',
+    UPDATE_APP = 'UPDATE_APP',
 }

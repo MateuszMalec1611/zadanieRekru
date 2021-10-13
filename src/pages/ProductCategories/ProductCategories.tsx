@@ -1,12 +1,16 @@
-import { Col, Container, ListGroup, Row } from 'react-bootstrap';
+import { Col, Container, ListGroup, Row, Spinner } from 'react-bootstrap';
 import Category from 'src/components/Category/Category';
 import PageTitle from 'src/components/PageTitle/PageTitle';
+import { useApp } from 'src/hooks/useApp';
 import { useCategories } from 'src/hooks/useCategories';
 
 const ProductCategories = () => {
     const {
         categoriesState: { categories },
     } = useCategories();
+    const {
+        appState: { loading },
+    } = useApp();
 
     const categoriesList = categories.map(category => (
         <Category key={category.uid} category={category} />
@@ -17,7 +21,11 @@ const ProductCategories = () => {
             <PageTitle>Lista kategorii</PageTitle>
             <Row>
                 <Col className="d-flex justify-content-center">
-                    <ListGroup style={{ width: 500 }}>{categoriesList}</ListGroup>
+                    {loading ? (
+                        <Spinner animation="border" />
+                    ) : (
+                        <ListGroup style={{ width: 500 }}>{categoriesList}</ListGroup>
+                    )}
                 </Col>
             </Row>
         </Container>

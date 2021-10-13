@@ -5,7 +5,6 @@ export type ProviderValue = {
 
 export interface ProductsState {
     products: Product[];
-    updateProducts: boolean;
 }
 
 export type GetProducts = {
@@ -16,10 +15,6 @@ export type GetProducts = {
 export type GetProduct = {
     type: ProductsActionType.GET_PRODUCTS;
     payload: Product;
-};
-export type UpdateProducts = {
-    type: ProductsActionType.UPDATE_PRODUCTS;
-    payload: boolean;
 };
 
 export type Product = {
@@ -57,10 +52,9 @@ export type Product = {
     weight: number;
 };
 
-export type ProductsActions = GetProducts | UpdateProducts;
+export type ProductsActions = GetProducts;
 
 export enum ProductsActionType {
     GET_PRODUCTS = 'GET_PRODUCTS',
     GET_PRODUCT = 'GET_PRODUCT',
-    UPDATE_PRODUCTS = 'UPDATE_PRODUCTS',
 }

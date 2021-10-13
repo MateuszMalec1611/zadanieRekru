@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Col, Container, Form, Row, Button, Alert } from 'react-bootstrap';
+import { Col, Container, Form, Row, Button, Alert, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router';
 import { editProduct, fetchProduct } from 'src/store/Products/Products.services';
 import PageTitle from 'src/components/PageTitle/PageTitle';
@@ -25,8 +25,6 @@ const EditProduct = () => {
         appDispatch,
         appState: { loading },
     } = useApp();
-    const { productsDispatch } = useProducts();
-
     const { id } = useParams<ParamsProps>();
     const productId = +id;
 
@@ -75,7 +73,8 @@ const EditProduct = () => {
                 id: selectedCategory.value,
             };
             const status = await editProduct(updatedProduct, product!.id);
-            productsDispatch({ type: ProductsActionType.UPDATE_PRODUCTS, payload: true });
+
+            appDispatch({ type: AppActionType.UPDATE_APP, payload: true });
             setSelectedCategory(undefined);
             setSuccess(true);
         } catch (err) {
@@ -101,7 +100,7 @@ const EditProduct = () => {
             <Row>
                 <Col className="d-flex justify-content-center">
                     {loading ? (
-                        <p>loading</p>
+                        <Spinner animation="border" />
                     ) : (
                         <Form
                             onSubmit={handleEditProduct}
