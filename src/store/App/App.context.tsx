@@ -1,11 +1,4 @@
-import React, { createContext, useEffect, useReducer } from 'react';
-import { useCategory } from 'src/hooks/useCategories';
-import { useProducts } from 'src/hooks/useProducts';
-import { prepareProductsData } from 'src/utils/prepareProductsData';
-import { fetchCategories } from '../Categories/Categories.services';
-import { CategoriesActionType } from '../Categories/Categories.types';
-import { fetchProducts } from '../Products/Products.services';
-import { ProductsActionType } from '../Products/Products.types';
+import React, { createContext, useReducer } from 'react';
 import { AppActions, AppActionType, AppState, ProviderValue } from './App.types';
 
 export const AppContext = createContext({} as ProviderValue);
@@ -31,30 +24,6 @@ const reducer = (state: AppState, action: AppActions) => {
 
 const AppProvider: React.FC = ({ children }) => {
     const [appState, appDispatch] = useReducer(reducer, initialState);
-    const { productsDispatch } = useProducts();
-    const { categoriesDispatch } = useCategory();
-
-    const getProductsAndCategories = async () => {
-        try {
-            appDispatch({ type: AppActionType.LOADING, payload: true });
-
-            const { data: products } = await fetchProducts();
-            const { data: categories } = await fetchCategories();
-
-            const productsList = prepareProductsData(products, categories);
-
-            productsDispatch({ type: ProductsActionType.GET_PRODUCTS, payload: productsList });
-            categoriesDispatch({ type: CategoriesActionType.GET_CATEGORIES, payload: categories });
-        } catch (err) {
-            alert(err);
-        } finally {
-            appDispatch({ type: AppActionType.LOADING, payload: false });
-        }
-    };
-
-    useEffect(() => {
-        getProductsAndCategories();
-    }, []);
 
     return <AppContext.Provider value={{ appState, appDispatch }}>{children}</AppContext.Provider>;
 };

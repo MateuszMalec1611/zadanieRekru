@@ -1,5 +1,9 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useEffect, useReducer } from 'react';
+import { useApp } from 'src/hooks/useApp';
+import { AppActionType } from '../App/App.types';
+import { fetchProducts } from './Products.services';
 import {
+    Product,
     ProductsActions,
     ProductsActionType,
     ProductsState,
@@ -26,6 +30,26 @@ const reducer = (state: ProductsState, action: ProductsActions) => {
 
 const ProductsProvider: React.FC = ({ children }) => {
     const [productsState, productsDispatch] = useReducer(reducer, initialState);
+    const { appDispatch } = useApp();
+
+    const getProducts = async () => {
+        try {
+            appDispatch({ type: AppActionType.LOADING, payload: true });
+
+            const { data } = await fetchProducts();
+            const products: Product[] = data;
+
+            productsDispatch({ type: ProductsActionType.GET_PRODUCTS, payload: products });
+        } catch (err) {
+            alert(err);
+        } finally {
+            appDispatch({ type: AppActionType.LOADING, payload: false });
+        }
+    };
+
+    useEffect(() => {
+        getProducts();
+    }, []);
 
     return (
         <ProductsContext.Provider value={{ productsState, productsDispatch }}>

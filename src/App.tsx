@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import NoMatch from './pages/NoMatch/NoMatch';
 import Layout from './components/Layout/Layout';
 import Home from './pages/Home/Home';
-import ProductsList from './pages/ProductsList/ProductsList';
+import ProductsList from './pages/ProductsList/ProductList';
 import ProductCategories from './pages/ProductCategories/ProductCategories';
 import EditProduct from './pages/EditProduct/EditProduct';
 import EditCategory from './pages/EditCategory/EditCategory';

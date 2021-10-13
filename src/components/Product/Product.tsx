@@ -6,8 +6,9 @@ interface ProductProps {
     product: ProductType;
 }
 
-const Product: React.FC<ProductProps> = ({ product: { name, category_name, id } }) => {
+const Product: React.FC<ProductProps> = ({ product: { name, category, id } }) => {
     const history = useHistory();
+    const categoryName = category.name;
 
     const handleButton = () => history.push(`/edit-product/${id}`);
 
@@ -15,7 +16,7 @@ const Product: React.FC<ProductProps> = ({ product: { name, category_name, id } 
         <ListGroup.Item className="d-flex justify-content-between align-items-center ">
             <h4 className="m-0 text-uppercase">{name}</h4>
             <div className="d-flex align-items-center">
-                <p className="m-0 text-uppercase display-7">{category_name}</p>
+                <p className="m-0 text-uppercase display-7">{categoryName}</p>
                 <Button onClick={handleButton} className="ms-3 text-uppercase" variant="dark">
                     edit
                 </Button>

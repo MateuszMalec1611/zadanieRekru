@@ -28,7 +28,7 @@ const EditProduct = () => {
         products.forEach(product => {
             if (product.id === +id) {
                 setProductName(product.name);
-                setCategoryName(product.category_name);
+                // setCategoryName(product.category_name);
             }
         });
     };
@@ -39,7 +39,7 @@ const EditProduct = () => {
         setCategoryName(target.value);
 
     useEffect(() => {
-        getProduct();
+        if (products.length !== 0) getProduct();
     }, [loading]);
 
     return (
@@ -62,12 +62,12 @@ const EditProduct = () => {
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Nazwa kategorii</Form.Label>
-                                <Form.Control
-                                    onChange={handleCategoryInput}
-                                    value={categoryName}
-                                    type="text"
-                                    placeholder="Wpisz nazwę kategorii"
-                                />
+                                <Form.Select aria-label="Default select example">
+                                    <option>Open this select menu</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </Form.Select>
                             </Form.Group>
                             <Button variant="dark" type="submit">
                                 Zapisz
