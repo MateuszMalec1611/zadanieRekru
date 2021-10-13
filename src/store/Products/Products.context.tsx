@@ -14,13 +14,20 @@ export const ProductsContext = createContext({} as ProviderValue);
 
 const initialState: ProductsState = {
     products: [],
+    updateProducts: true,
 };
 
 const reducer = (state: ProductsState, action: ProductsActions) => {
     switch (action.type) {
         case ProductsActionType.GET_PRODUCTS:
             return {
+                ...state,
                 products: action.payload,
+            };
+        case ProductsActionType.UPDATE_PRODUCTS:
+            return {
+                ...state,
+                updateProducts: action.payload,
             };
 
         default:
@@ -31,6 +38,7 @@ const reducer = (state: ProductsState, action: ProductsActions) => {
 const ProductsProvider: React.FC = ({ children }) => {
     const [productsState, productsDispatch] = useReducer(reducer, initialState);
     const { appDispatch } = useApp();
+    const { updateProducts } = productsState;
 
     const getProducts = async () => {
         try {
@@ -44,12 +52,13 @@ const ProductsProvider: React.FC = ({ children }) => {
             alert(err);
         } finally {
             appDispatch({ type: AppActionType.LOADING, payload: false });
+            productsDispatch({ type: ProductsActionType.UPDATE_PRODUCTS, payload: false });
         }
     };
 
     useEffect(() => {
-        getProducts();
-    }, []);
+        if (updateProducts) getProducts();
+    }, [updateProducts]);
 
     return (
         <ProductsContext.Provider value={{ productsState, productsDispatch }}>

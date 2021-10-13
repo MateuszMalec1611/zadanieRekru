@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
-import { Col, Container, Form, Row, Button } from 'react-bootstrap';
+import { Col, Container, Form, Row, Button, Alert } from 'react-bootstrap';
 import { useParams } from 'react-router';
 import { editProduct, fetchProduct } from 'src/store/Products/Products.services';
 import PageTitle from 'src/components/PageTitle/PageTitle';
 import { useApp } from 'src/hooks/useApp';
 import { AppActionType } from 'src/store/App/App.types';
-import { Product } from 'src/store/Products/Products.types';
+import { Product, ProductsActionType } from 'src/store/Products/Products.types';
 import AsyncSelect from 'react-select/async';
 import { Category } from 'src/store/Categories/Categories.types';
 import { fetchCategorySelect } from 'src/store/Categories/Categories.services';
+import { useProducts } from 'src/hooks/useProducts';
 
 type ParamsProps = {
     id: string;
@@ -19,10 +20,12 @@ const EditProduct = () => {
     const [productName, setProductName] = useState('');
     const [product, setProduct] = useState<Product>();
     const [selectedCategory, setSelectedCategory] = useState<SelectedOption>();
+    const [success, setSuccess] = useState(false);
     const {
         appDispatch,
         appState: { loading },
     } = useApp();
+    const { productsDispatch } = useProducts();
 
     const { id } = useParams<ParamsProps>();
     const productId = +id;
@@ -55,6 +58,7 @@ const EditProduct = () => {
 
     const handleEditProduct = async (event: React.FormEvent) => {
         event.preventDefault();
+        setSuccess(false);
         if (!selectedCategory?.value || productName.trim() === '') return;
 
         try {
@@ -71,7 +75,9 @@ const EditProduct = () => {
                 id: selectedCategory.value,
             };
             const status = await editProduct(updatedProduct, product!.id);
+            productsDispatch({ type: ProductsActionType.UPDATE_PRODUCTS, payload: true });
             setSelectedCategory(undefined);
+            setSuccess(true);
         } catch (err) {
             alert(err);
         } finally {
@@ -122,6 +128,11 @@ const EditProduct = () => {
                             <Button variant="dark" type="submit">
                                 Zapisz
                             </Button>
+                            {success && (
+                                <Alert className="mt-4 text-center" variant="success">
+                                    Pomyślnie zaktualizowany produkt
+                                </Alert>
+                            )}
                         </Form>
                     )}
                 </Col>
