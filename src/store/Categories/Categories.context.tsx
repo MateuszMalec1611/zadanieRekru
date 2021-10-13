@@ -16,8 +16,7 @@ const reducer = (state: CategoriesState, action: CategoriesActions) => {
     switch (action.type) {
         case CategoriesActionType.GET_CATEGORIES:
             return {
-                ...state,
-                products: action.payload,
+                categories: action.payload,
             };
 
         default:

@@ -4,29 +4,6 @@ import Product from 'src/components/Product/Product';
 import { useApp } from 'src/hooks/useApp';
 import { useProducts } from 'src/hooks/useProducts';
 
-const DUMMY_DATA = [
-    {
-        name: 'schabowy',
-        category: 'meat',
-    },
-    {
-        name: 'cielęcina',
-        category: 'meat',
-    },
-    {
-        name: 'wołowina',
-        category: 'meat',
-    },
-    {
-        name: 'kurczak',
-        category: 'meat',
-    },
-    {
-        name: 'wieprzowina',
-        category: 'meat',
-    },
-];
-
 const ProductsList = () => {
     const {
         appState: { loading },
@@ -49,7 +26,7 @@ const ProductsList = () => {
                     ) : (
                         <ListGroup style={{ width: 500 }}>
                             {products.length === 0 ? (
-                                <p>Nie ma zadnego produktu dostępnego</p>
+                                <p>Brak produktów</p>
                             ) : (
                                 productsList
                             )}
