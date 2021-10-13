@@ -15,3 +15,10 @@ export const editProduct = async (product: Product, id: number) => {
     const { status } = await api().put(`/products/${id}`, product);
     return status;
 };
+
+export const addProduct = async (product: Product) => {
+    console.log(product);
+
+    const { status } = await api().post(`/product_categories`, product);
+    return status;
+};

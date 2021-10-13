@@ -5,11 +5,10 @@ import { editProduct, fetchProduct } from 'src/store/Products/Products.services'
 import PageTitle from 'src/components/PageTitle/PageTitle';
 import { useApp } from 'src/hooks/useApp';
 import { AppActionType } from 'src/store/App/App.types';
-import { Product, ProductsActionType } from 'src/store/Products/Products.types';
+import { Product } from 'src/store/Products/Products.types';
 import AsyncSelect from 'react-select/async';
 import { Category } from 'src/store/Categories/Categories.types';
 import { fetchCategorySelect } from 'src/store/Categories/Categories.services';
-import { useProducts } from 'src/hooks/useProducts';
 
 type ParamsProps = {
     id: string;
