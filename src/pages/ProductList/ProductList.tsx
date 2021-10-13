@@ -1,4 +1,4 @@
-import { Col, Container, ListGroup, Row } from 'react-bootstrap';
+import { Col, Container, ListGroup, Row, Spinner } from 'react-bootstrap';
 import PageTitle from 'src/components/PageTitle/PageTitle';
 import Product from 'src/components/Product/Product';
 import { useApp } from 'src/hooks/useApp';
@@ -26,7 +26,7 @@ const ProductList: React.FC<ProductListProps> = ({ editOption }) => {
             <Row>
                 <Col className="d-flex justify-content-center">
                     {loading ? (
-                        <p>loading</p>
+                        <Spinner animation="border" />
                     ) : (
                         <ListGroup style={{ width: 500 }}>
                             {products.length === 0 ? <p>Brak produktów</p> : productsList}

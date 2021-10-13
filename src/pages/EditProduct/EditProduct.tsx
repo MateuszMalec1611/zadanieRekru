@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Col, Container, Form, Row, Button, Alert } from 'react-bootstrap';
+import { Col, Container, Form, Row, Button, Alert, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router';
 import { editProduct, fetchProduct } from 'src/store/Products/Products.services';
 import PageTitle from 'src/components/PageTitle/PageTitle';
@@ -101,7 +101,7 @@ const EditProduct = () => {
             <Row>
                 <Col className="d-flex justify-content-center">
                     {loading ? (
-                        <p>loading</p>
+                        <Spinner animation="border" />
                     ) : (
                         <Form
                             onSubmit={handleEditProduct}
