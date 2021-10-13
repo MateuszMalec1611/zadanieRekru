@@ -13,8 +13,10 @@ export const fetchCategory = async (id: number) => {
 };
 
 export const fetchCategorySelect = async (categoryName: string) => {
-    const { data } = await api().get(`/product_categories?search=${categoryName}`);
-    return data;
+    const { data }: AxiosResponse<{ data: Category[]; error: any[] }> = await api().get(
+        `/product_categories?search=${categoryName}`
+    );
+    return data.data;
 };
 
 export const editCategory = async (category: Category) => {

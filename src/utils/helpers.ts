@@ -1,8 +1,8 @@
-import { SelectOption } from 'src/pages/EditProduct/EditProduct';
+import { SelectedOption } from 'src/types/select.types';
 
 export const formatDataForSelect = (data: any) => {
     return {
         label: data?.name || '',
         value: data?.id,
-    } as SelectOption;
+    } as SelectedOption;
 };

@@ -12,6 +12,11 @@ export interface ProductsState {
     error?: Error;
 }
 
+export type AddProduct = {
+    type: ProductsActionType.ADD_PRODUCT;
+    payload: Product;
+};
+
 export type SetProducts = {
     type: ProductsActionType.SET_PRODUCTS;
     payload: Product[];
@@ -33,17 +38,35 @@ export type SetLoading = {
 };
 
 export type Product = {
-    uid: string;
+    name: string;
+    id: number;
     category: Category;
     category_id: number;
-    id: number;
     measure_type: string;
-    name: string;
     tax_id: number;
     type: string;
+    uid: string;
 };
 
-export type ProductsActions = SetProducts | UpdateProduct | UpdateProductCategory | SetLoading;
+export type ProductToAdd = {
+    name: string;
+    measure_type: string;
+    category_id: number;
+    tax_id: number;
+    type: 'BASIC';
+};
+
+export type Tax = {
+    id: 4;
+    name: '0%';
+};
+
+export type ProductsActions =
+    | AddProduct
+    | SetProducts
+    | UpdateProduct
+    | UpdateProductCategory
+    | SetLoading;
 
 export enum ProductsActionType {
     ADD_PRODUCT = 'ADD_PRODUCT',

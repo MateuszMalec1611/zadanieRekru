@@ -18,6 +18,14 @@ const initialState: ProductsState = {
 
 const reducer = (state: ProductsState, action: ProductsActions) => {
     switch (action.type) {
+        case ProductsActionType.ADD_PRODUCT:
+            let newProductList: [] | Product[] = [];
+            if (!!state.products.length) newProductList = [...state.products, action.payload];
+            return {
+                ...state,
+                products: newProductList,
+                loading: false,
+            };
         case ProductsActionType.SET_PRODUCTS:
             return {
                 ...state,

@@ -9,16 +9,16 @@ import { Category } from 'src/store/Categories/Categories.types';
 import { fetchCategorySelect } from 'src/store/Categories/Categories.services';
 import { formatDataForSelect } from 'src/utils/helpers';
 import { useProducts } from 'src/hooks/useProducts';
+import { SelectedOption } from 'src/types/select.types';
 
 type ParamsProps = {
     id: string;
 };
-export type SelectOption = { label: string; value: number };
 
 const EditProduct = () => {
     const [productName, setProductName] = useState('');
     const [product, setProduct] = useState<Product>();
-    const [selectedCategory, setSelectedCategory] = useState<SelectOption>();
+    const [selectedCategory, setSelectedCategory] = useState<SelectedOption>();
     const [success, setSuccess] = useState(false);
     const {
         productsState: { loading },
@@ -45,8 +45,7 @@ const EditProduct = () => {
     }, [productId, productsDispatch]);
 
     const searchCategories = async (searchValue: string) => {
-        const { data } = await fetchCategorySelect(searchValue);
-        const categories: Category[] = data;
+        const categories = await fetchCategorySelect(searchValue);
 
         return categories.map(category => formatDataForSelect(category));
     };
@@ -75,7 +74,7 @@ const EditProduct = () => {
     const handleNameInput = ({ target }: React.ChangeEvent<HTMLInputElement>) =>
         setProductName(target.value);
 
-    const handleCategoryChange = (selectedOptions?: SelectOption | null) =>
+    const handleCategoryChange = (selectedOptions?: SelectedOption | null) =>
         setSelectedCategory(selectedOptions!);
 
     useEffect(() => {
@@ -118,7 +117,7 @@ const EditProduct = () => {
                             </Button>
                             {success && (
                                 <Alert className="mt-4 text-center" variant="success">
-                                    Pomyślnie zaktualizowany produkt
+                                    Pomyślnie zaktualizowano produkt
                                 </Alert>
                             )}
                         </Form>
