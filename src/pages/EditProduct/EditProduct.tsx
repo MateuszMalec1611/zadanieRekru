@@ -2,20 +2,22 @@ import { useEffect, useState } from 'react';
 import { Col, Container, Form, Row, Button } from 'react-bootstrap';
 import { useParams } from 'react-router';
 import { fetchProduct } from 'src/store/Products/Products.services';
-import { fetchCategory } from 'src/store/Categories/Categories.services';
 import PageTitle from 'src/components/PageTitle/PageTitle';
 import { useApp } from 'src/hooks/useApp';
 import { AppActionType } from 'src/store/App/App.types';
-import { useProducts } from 'src/hooks/useProducts';
 import { Product } from 'src/store/Products/Products.types';
+import AsyncSelect from 'react-select/async';
+import { Category } from 'src/store/Categories/Categories.types';
+import { fetchCategorySelect } from 'src/store/Categories/Categories.services';
 
 type ParamsProps = {
     id: string;
 };
+type SelectedOption = { label: string; value: number };
 
 const EditProduct = () => {
     const [productName, setProductName] = useState('');
-    const [categoryName, setCategoryName] = useState('');
+    const [categoryId, setCategoryId] = useState<number>();
     const {
         appDispatch,
         appState: { loading },
@@ -30,7 +32,7 @@ const EditProduct = () => {
 
             const { data } = await fetchProduct(productId);
             const product: Product = data;
-            
+
             setProductName(product.name);
         } catch (err) {
             alert(err);
@@ -39,10 +41,21 @@ const EditProduct = () => {
         }
     };
 
+    const searchCategories = async (searchValue: string) => {
+        const { data } = await fetchCategorySelect(searchValue);
+        const categories: Category[] = data;
+
+        return categories.map(category => ({
+            label: category.name,
+            value: category.id,
+        }));
+    };
+
     const handleNameInput = ({ target }: React.ChangeEvent<HTMLInputElement>) =>
         setProductName(target.value);
-    const handleCategoryInput = ({ target }: React.ChangeEvent<HTMLInputElement>) =>
-        setCategoryName(target.value);
+
+    const handleCategoryChange = (selectedOptions?: SelectedOption | null) =>
+        setCategoryId(selectedOptions!.value);
 
     useEffect(() => {
         getProduct();
@@ -68,12 +81,12 @@ const EditProduct = () => {
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Nazwa kategorii</Form.Label>
-                                <Form.Select aria-label="Default select example">
-                                    <option>Open this select menu</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </Form.Select>
+                                <AsyncSelect
+                                    cacheOptions
+                                    defaultOptions
+                                    loadOptions={searchCategories}
+                                    onChange={handleCategoryChange}
+                                />
                             </Form.Group>
                             <Button variant="dark" type="submit">
                                 Zapisz
