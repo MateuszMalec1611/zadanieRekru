@@ -8,8 +8,6 @@ const ProductCategories = () => {
         categoriesState: { categories },
     } = useCategory();
 
-    console.log(categories);
-
     const categoriesList = categories.map(category => (
         <Category key={category.uid} category={category} />
     ));

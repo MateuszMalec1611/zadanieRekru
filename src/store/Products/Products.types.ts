@@ -12,6 +12,11 @@ export type GetProducts = {
     payload: Product[];
 };
 
+export type GetProduct = {
+    type: ProductsActionType.GET_PRODUCTS;
+    payload: Product;
+};
+
 export type Product = {
     name: string;
     category_name: string;
@@ -26,4 +31,5 @@ export type ProductsActions = GetProducts;
 
 export enum ProductsActionType {
     GET_PRODUCTS = 'GET_PRODUCTS',
+    GET_PRODUCT = 'GET_PRODUCT',
 }
