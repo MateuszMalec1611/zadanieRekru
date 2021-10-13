@@ -4,12 +4,22 @@ export type ProviderValue = {
 };
 
 export interface ProductsState {
-    products: string[];
+    products: Product[];
 }
 
 export type GetProducts = {
     type: ProductsActionType.GET_PRODUCTS;
-    payload: string[];
+    payload: Product[];
+};
+
+export type Product = {
+    name: string;
+    category_name: string;
+    category_id: number;
+    id: number;
+    uid: string;
+    updated_at: string;
+    status: string;
 };
 
 export type ProductsActions = GetProducts;

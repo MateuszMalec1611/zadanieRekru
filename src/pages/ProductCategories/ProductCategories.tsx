@@ -1,28 +1,25 @@
 import { Col, Container, ListGroup, Row } from 'react-bootstrap';
 import Category from 'src/components/Category/Category';
 import PageTitle from 'src/components/PageTitle/PageTitle';
-
-const DUMMY_DATA = [
-    {
-        name: 'mięso',
-    },
-    {
-        name: 'pizza',
-    },
-    {
-        name: 'warzywa',
-    },
-];
+import { useCategory } from 'src/hooks/useCategories';
 
 const ProductCategories = () => {
-    const categories = DUMMY_DATA.map((p, i) => <Category key={i} name={p.name} />);
+    const {
+        categoriesState: { categories },
+    } = useCategory();
+
+    console.log(categories);
+
+    const categoriesList = categories.map(category => (
+        <Category key={category.uid} category={category} />
+    ));
 
     return (
         <Container>
             <PageTitle>Lista kategorii</PageTitle>
             <Row>
                 <Col className="d-flex justify-content-center">
-                    <ListGroup style={{ width: 500 }}>{categories}</ListGroup>
+                    <ListGroup style={{ width: 500 }}>{categoriesList}</ListGroup>
                 </Col>
             </Row>
         </Container>

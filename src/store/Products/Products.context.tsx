@@ -16,7 +16,6 @@ const reducer = (state: ProductsState, action: ProductsActions) => {
     switch (action.type) {
         case ProductsActionType.GET_PRODUCTS:
             return {
-                ...state,
                 products: action.payload,
             };
 

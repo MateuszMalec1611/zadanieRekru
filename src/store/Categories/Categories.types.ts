@@ -4,12 +4,20 @@ export type ProviderValue = {
 };
 
 export interface CategoriesState {
-    categories: string[];
+    categories: Category[];
 }
 
 export type GetCategories = {
     type: CategoriesActionType.GET_CATEGORIES;
-    payload: string[];
+    payload: Category[];
+};
+
+export type Category = {
+    id: number;
+    name: string;
+    status: string;
+    uid: string;
+    updated_at: string;
 };
 
 export type CategoriesActions = GetCategories;
