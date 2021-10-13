@@ -1,14 +1,12 @@
 import { Col, Container, ListGroup, Row } from 'react-bootstrap';
 import Category from 'src/components/Category/Category';
 import PageTitle from 'src/components/PageTitle/PageTitle';
-import { useCategory } from 'src/hooks/useCategories';
+import { useCategories } from 'src/hooks/useCategories';
 
 const ProductCategories = () => {
     const {
         categoriesState: { categories },
-    } = useCategory();
-
-    console.log(categories);
+    } = useCategories();
 
     const categoriesList = categories.map(category => (
         <Category key={category.uid} category={category} />

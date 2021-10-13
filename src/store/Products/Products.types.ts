@@ -5,6 +5,7 @@ export type ProviderValue = {
 
 export interface ProductsState {
     products: Product[];
+    updateProducts: boolean;
 }
 
 export type GetProducts = {
@@ -12,18 +13,54 @@ export type GetProducts = {
     payload: Product[];
 };
 
-export type Product = {
-    name: string;
-    category_name: string;
-    category_id: number;
-    id: number;
-    uid: string;
-    updated_at: string;
-    status: string;
+export type GetProduct = {
+    type: ProductsActionType.GET_PRODUCTS;
+    payload: Product;
+};
+export type UpdateProducts = {
+    type: ProductsActionType.UPDATE_PRODUCTS;
+    payload: boolean;
 };
 
-export type ProductsActions = GetProducts;
+export type Product = {
+    category: {
+        id: number;
+        name: string;
+        status: string;
+        uid: string;
+        updated_at: string;
+    };
+    category_id: number;
+    cost_price_gross_money: {
+        amount: number;
+        currency: string;
+    };
+    cost_price_money: {
+        amount: number;
+        currency: string;
+    };
+    id: number;
+    measure_type: string;
+    name: string;
+    recipe_amount: number;
+    state: {
+        available_amount: number;
+        commited_amount: number;
+        in_stock_amount: number;
+        incoming_amount: number;
+    };
+    status: string;
+    tax_id: number;
+    type: string;
+    uid: string;
+    updated_at: string;
+    weight: number;
+};
+
+export type ProductsActions = GetProducts | UpdateProducts;
 
 export enum ProductsActionType {
     GET_PRODUCTS = 'GET_PRODUCTS',
+    GET_PRODUCT = 'GET_PRODUCT',
+    UPDATE_PRODUCTS = 'UPDATE_PRODUCTS',
 }

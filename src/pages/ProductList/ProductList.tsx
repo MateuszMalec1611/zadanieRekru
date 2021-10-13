@@ -4,7 +4,7 @@ import Product from 'src/components/Product/Product';
 import { useApp } from 'src/hooks/useApp';
 import { useProducts } from 'src/hooks/useProducts';
 
-const ProductsList = () => {
+const ProductList = () => {
     const {
         appState: { loading },
     } = useApp();
@@ -38,4 +38,4 @@ const ProductsList = () => {
     );
 };
 
-export default ProductsList;
+export default ProductList;
