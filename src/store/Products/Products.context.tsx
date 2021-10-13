@@ -1,6 +1,4 @@
-import React, { createContext, useEffect, useReducer } from 'react';
-import { useApp } from 'src/hooks/useApp';
-import { AppActionType } from '../App/App.types';
+import React, { createContext, useCallback, useReducer } from 'react';
 import { fetchProducts } from './Products.services';
 import {
     Product,
@@ -14,16 +12,35 @@ export const ProductsContext = createContext({} as ProviderValue);
 
 const initialState: ProductsState = {
     products: [],
+    loading: false,
+    error: undefined,
 };
 
 const reducer = (state: ProductsState, action: ProductsActions) => {
     switch (action.type) {
-        case ProductsActionType.GET_PRODUCTS:
+        case ProductsActionType.SET_PRODUCTS:
             return {
                 ...state,
                 products: action.payload,
+                loading: false,
             };
-
+        case ProductsActionType.UPDATE_PRODUCT:
+            const updatedProducts = state.products.map(product => {
+                if (product.id === action.payload.id) {
+                    return action.payload;
+                }
+                return product;
+            });
+            return {
+                ...state,
+                products: updatedProducts,
+                loading: false,
+            };
+        case ProductsActionType.SET_LOADING:
+            return {
+                ...state,
+                loading: action.payload ?? true,
+            };
         default:
             return state;
     }
@@ -31,33 +48,22 @@ const reducer = (state: ProductsState, action: ProductsActions) => {
 
 const ProductsProvider: React.FC = ({ children }) => {
     const [productsState, productsDispatch] = useReducer(reducer, initialState);
-    const {
-        appDispatch,
-        appState: { updateApp },
-    } = useApp();
 
-    const getProducts = async () => {
+    const getProducts = useCallback(async () => {
         try {
-            appDispatch({ type: AppActionType.LOADING, payload: true });
+            productsDispatch({ type: ProductsActionType.SET_LOADING });
 
             const { data } = await fetchProducts();
             const products: Product[] = data;
 
-            productsDispatch({ type: ProductsActionType.GET_PRODUCTS, payload: products });
+            productsDispatch({ type: ProductsActionType.SET_PRODUCTS, payload: products });
         } catch (err) {
             alert(err);
-        } finally {
-            appDispatch({ type: AppActionType.LOADING, payload: false });
-            appDispatch({ type: AppActionType.UPDATE_APP, payload: false });
         }
-    };
-
-    useEffect(() => {
-        if (updateApp) getProducts();
-    }, [updateApp]);
+    }, []);
 
     return (
-        <ProductsContext.Provider value={{ productsState, productsDispatch }}>
+        <ProductsContext.Provider value={{ productsState, productsDispatch, getProducts }}>
             {children}
         </ProductsContext.Provider>
     );
