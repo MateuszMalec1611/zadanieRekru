@@ -4,7 +4,11 @@ import Product from 'src/components/Product/Product';
 import { useApp } from 'src/hooks/useApp';
 import { useProducts } from 'src/hooks/useProducts';
 
-const ProductList = () => {
+interface ProductListProps {
+    editOption?: boolean;
+}
+
+const ProductList: React.FC<ProductListProps> = ({ editOption }) => {
     const {
         appState: { loading },
     } = useApp();
@@ -13,7 +17,7 @@ const ProductList = () => {
     } = useProducts();
 
     const productsList = products.map(product => (
-        <Product key={product.uid} product={product} />
+        <Product key={product.uid} editOption={editOption} product={product} />
     ));
 
     return (
@@ -25,11 +29,7 @@ const ProductList = () => {
                         <p>loading</p>
                     ) : (
                         <ListGroup style={{ width: 500 }}>
-                            {products.length === 0 ? (
-                                <p>Brak produktów</p>
-                            ) : (
-                                productsList
-                            )}
+                            {products.length === 0 ? <p>Brak produktów</p> : productsList}
                         </ListGroup>
                     )}
                 </Col>

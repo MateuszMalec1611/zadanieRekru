@@ -2,7 +2,6 @@ import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import NoMatch from './pages/NoMatch/NoMatch';
 import Layout from './components/Layout/Layout';
-import Home from './pages/Home/Home';
 import ProductList from './pages/ProductList/ProductList';
 import ProductCategories from './pages/ProductCategories/ProductCategories';
 import EditProduct from './pages/EditProduct/EditProduct';
@@ -14,8 +13,8 @@ const App = () => {
     return (
         <Layout>
             <Switch>
-                <Route component={Home} exact path="/" />
-                <Route component={ProductList} path="/products-list" />
+                <Route component={ProductList} exact path="/" />
+                <Route component={() => <ProductList editOption={true} />} path="/products-list" />
                 <Route component={ProductCategories} path="/product-categories" />
                 <Route component={EditProduct} path="/edit-product/:id" />
                 <Route component={EditCategory} path="/edit-category/:id" />

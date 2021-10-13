@@ -4,9 +4,10 @@ import { Product as ProductType } from 'src/store/Products/Products.types';
 
 interface ProductProps {
     product: ProductType;
+    editOption?: boolean;
 }
 
-const Product: React.FC<ProductProps> = ({ product: { name, category, id } }) => {
+const Product: React.FC<ProductProps> = ({ product: { name, category, id }, editOption }) => {
     const history = useHistory();
     const categoryName = category.name;
 
@@ -17,9 +18,11 @@ const Product: React.FC<ProductProps> = ({ product: { name, category, id } }) =>
             <h4 className="m-0 text-uppercase">{name}</h4>
             <div className="d-flex align-items-center">
                 <p className="m-0 text-uppercase display-7">{categoryName}</p>
-                <Button onClick={handleButton} className="ms-3 text-uppercase" variant="dark">
-                    edit
-                </Button>
+                {editOption && (
+                    <Button onClick={handleButton} className="ms-3 text-uppercase" variant="dark">
+                        edit
+                    </Button>
+                )}
             </div>
         </ListGroup.Item>
     );
