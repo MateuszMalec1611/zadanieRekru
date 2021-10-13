@@ -1,7 +1,7 @@
+import { useEffect } from 'react';
 import { Col, Container, ListGroup, Row, Spinner } from 'react-bootstrap';
 import PageTitle from 'src/components/PageTitle/PageTitle';
 import Product from 'src/components/Product/Product';
-import { useApp } from 'src/hooks/useApp';
 import { useProducts } from 'src/hooks/useProducts';
 
 interface ProductListProps {
@@ -10,15 +10,19 @@ interface ProductListProps {
 
 const ProductList: React.FC<ProductListProps> = ({ editOption }) => {
     const {
-        appState: { loading },
-    } = useApp();
-    const {
-        productsState: { products },
+        productsState: { products, loading },
+        getProducts,
     } = useProducts();
 
     const productsList = products.map(product => (
         <Product key={product.uid} editOption={editOption} product={product} />
     ));
+
+    useEffect(() => {
+        if (!products.length) {
+            getProducts();
+        }
+    }, [products, getProducts]);
 
     return (
         <Container>

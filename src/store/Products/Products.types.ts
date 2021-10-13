@@ -1,60 +1,77 @@
+import { Category } from '../Categories/Categories.types';
+
 export type ProviderValue = {
     productsState: ProductsState;
     productsDispatch: (action: ProductsActions) => void;
+    getProducts: () => Promise<void>;
 };
 
 export interface ProductsState {
     products: Product[];
+    loading: boolean;
+    error?: Error;
 }
 
-export type GetProducts = {
-    type: ProductsActionType.GET_PRODUCTS;
-    payload: Product[];
-};
-
-export type GetProduct = {
-    type: ProductsActionType.GET_PRODUCTS;
+export type AddProduct = {
+    type: ProductsActionType.ADD_PRODUCT;
     payload: Product;
 };
 
+export type SetProducts = {
+    type: ProductsActionType.SET_PRODUCTS;
+    payload: Product[];
+};
+
+export type UpdateProduct = {
+    type: ProductsActionType.UPDATE_PRODUCT;
+    payload: Product;
+};
+
+export type UpdateProductCategory = {
+    type: ProductsActionType.UPDATE_PRODUCT_CATEGORY;
+    payload: Category;
+};
+
+export type SetLoading = {
+    type: ProductsActionType.SET_LOADING;
+    payload?: boolean;
+};
+
 export type Product = {
-    category: {
-        id: number;
-        name: string;
-        status: string;
-        uid: string;
-        updated_at: string;
-    };
-    category_id: number;
-    cost_price_gross_money: {
-        amount: number;
-        currency: string;
-    };
-    cost_price_money: {
-        amount: number;
-        currency: string;
-    };
-    id: number;
-    measure_type: string;
     name: string;
-    recipe_amount: number;
-    state: {
-        available_amount: number;
-        commited_amount: number;
-        in_stock_amount: number;
-        incoming_amount: number;
-    };
-    status: string;
+    id: number;
+    category: Category;
+    category_id: number;
+    measure_type: string;
     tax_id: number;
     type: string;
     uid: string;
-    updated_at: string;
-    weight: number;
 };
 
-export type ProductsActions = GetProducts;
+export type ProductToAdd = {
+    name: string;
+    measure_type: string;
+    category_id: number;
+    tax_id: number;
+    type: 'BASIC';
+};
+
+export type Tax = {
+    id: 4;
+    name: '0%';
+};
+
+export type ProductsActions =
+    | AddProduct
+    | SetProducts
+    | UpdateProduct
+    | UpdateProductCategory
+    | SetLoading;
 
 export enum ProductsActionType {
-    GET_PRODUCTS = 'GET_PRODUCTS',
-    GET_PRODUCT = 'GET_PRODUCT',
+    ADD_PRODUCT = 'ADD_PRODUCT',
+    SET_PRODUCTS = 'GET_PRODUCTS',
+    UPDATE_PRODUCT = 'UPDATE_PRODUCT',
+    UPDATE_PRODUCT_CATEGORY = 'UPDATE_PRODUCT_CATEGORY',
+    SET_LOADING = 'SET_LOADING',
 }

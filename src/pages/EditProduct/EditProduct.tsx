@@ -1,20 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Col, Container, Form, Row, Button, Alert, Spinner } from 'react-bootstrap';
 import { useParams } from 'react-router';
 import { editProduct, fetchProduct } from 'src/store/Products/Products.services';
 import PageTitle from 'src/components/PageTitle/PageTitle';
-import { useApp } from 'src/hooks/useApp';
-import { AppActionType } from 'src/store/App/App.types';
 import { Product, ProductsActionType } from 'src/store/Products/Products.types';
 import AsyncSelect from 'react-select/async';
 import { Category } from 'src/store/Categories/Categories.types';
 import { fetchCategorySelect } from 'src/store/Categories/Categories.services';
+import { formatDataForSelect } from 'src/utils/helpers';
 import { useProducts } from 'src/hooks/useProducts';
+import { SelectedOption } from 'src/types/select.types';
 
 type ParamsProps = {
     id: string;
 };
-type SelectedOption = { label: string; value: number };
 
 const EditProduct = () => {
     const [productName, setProductName] = useState('');
@@ -22,65 +21,53 @@ const EditProduct = () => {
     const [selectedCategory, setSelectedCategory] = useState<SelectedOption>();
     const [success, setSuccess] = useState(false);
     const {
-        appDispatch,
-        appState: { loading },
-    } = useApp();
+        productsState: { loading },
+        productsDispatch,
+    } = useProducts();
     const { id } = useParams<ParamsProps>();
     const productId = +id;
 
-    const getProduct = async () => {
+    const getProduct = useCallback(async () => {
         try {
-            appDispatch({ type: AppActionType.LOADING, payload: true });
+            productsDispatch({ type: ProductsActionType.SET_LOADING });
 
             const { data } = await fetchProduct(productId);
             const fetchedProduct: Product = data;
 
             setProductName(fetchedProduct.name);
             setProduct(fetchedProduct);
+            setSelectedCategory(formatDataForSelect(fetchedProduct.category));
         } catch (err) {
             alert(err);
         } finally {
-            appDispatch({ type: AppActionType.LOADING, payload: false });
+            productsDispatch({ type: ProductsActionType.SET_LOADING, payload: false });
         }
-    };
+    }, [productId, productsDispatch]);
 
     const searchCategories = async (searchValue: string) => {
-        const { data } = await fetchCategorySelect(searchValue);
-        const categories: Category[] = data;
+        const categories = await fetchCategorySelect(searchValue);
 
-        return categories.map(category => ({
-            label: category.name,
-            value: category.id,
-        }));
+        return categories.map(category => formatDataForSelect(category));
     };
 
     const handleEditProduct = async (event: React.FormEvent) => {
         event.preventDefault();
         setSuccess(false);
+        if (!product) return;
         if (!selectedCategory?.value || productName.trim() === '') return;
 
         try {
-            appDispatch({ type: AppActionType.LOADING, payload: true });
-            const updatedProduct = {
-                ...product!,
-                category: {
-                    ...product!.category!,
-                    id: selectedCategory.value,
-                    name: selectedCategory.label,
-                },
+            productsDispatch({ type: ProductsActionType.SET_LOADING });
+            const updatedProduct = await editProduct({
+                ...product,
                 name: productName,
                 category_id: selectedCategory.value,
-                id: selectedCategory.value,
-            };
-            const status = await editProduct(updatedProduct, product!.id);
+            });
 
-            appDispatch({ type: AppActionType.UPDATE_APP, payload: true });
-            setSelectedCategory(undefined);
+            productsDispatch({ type: ProductsActionType.UPDATE_PRODUCT, payload: updatedProduct });
             setSuccess(true);
         } catch (err) {
             alert(err);
-        } finally {
-            appDispatch({ type: AppActionType.LOADING, payload: false });
         }
     };
 
@@ -92,7 +79,7 @@ const EditProduct = () => {
 
     useEffect(() => {
         getProduct();
-    }, []);
+    }, [getProduct]);
 
     return (
         <Container>
@@ -120,6 +107,7 @@ const EditProduct = () => {
                                 <AsyncSelect
                                     cacheOptions
                                     defaultOptions
+                                    value={selectedCategory}
                                     loadOptions={searchCategories}
                                     onChange={handleCategoryChange}
                                 />
@@ -129,7 +117,7 @@ const EditProduct = () => {
                             </Button>
                             {success && (
                                 <Alert className="mt-4 text-center" variant="success">
-                                    Pomyślnie zaktualizowany produkt
+                                    Pomyślnie zaktualizowano produkt
                                 </Alert>
                             )}
                         </Form>

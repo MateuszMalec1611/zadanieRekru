@@ -1,11 +1,12 @@
 import { Alert, Col, Container, Form, Row, Spinner, Button } from 'react-bootstrap';
 import { useParams } from 'react-router';
 import PageTitle from 'src/components/PageTitle/PageTitle';
-import { useApp } from 'src/hooks/useApp';
-import { useEffect, useState } from 'react';
-import { AppActionType } from 'src/store/App/App.types';
-import { Category } from 'src/store/Categories/Categories.types';
+import { useCallback, useEffect, useState } from 'react';
+import { CategoriesActionType, Category } from 'src/store/Categories/Categories.types';
 import { editCategory, fetchCategory } from 'src/store/Categories/Categories.services';
+import { useCategories } from 'src/hooks/useCategories';
+import { useProducts } from 'src/hooks/useProducts';
+import { ProductsActionType } from 'src/store/Products/Products.types';
 
 type ParamsProps = {
     id: string;
@@ -15,16 +16,17 @@ const EditCategory = () => {
     const [categoryName, setCategoryName] = useState('');
     const [category, setCategory] = useState<Category>();
     const [success, setSuccess] = useState(false);
-    const {
-        appDispatch,
-        appState: { loading },
-    } = useApp();
     const { id } = useParams<ParamsProps>();
     const categoryId = +id;
+    const {
+        categoriesState: { loading },
+        categoriesDispatch,
+    } = useCategories();
+    const { productsDispatch } = useProducts();
 
-    const getCategory = async () => {
+    const getCategory = useCallback(async () => {
         try {
-            appDispatch({ type: AppActionType.LOADING, payload: true });
+            categoriesDispatch({ type: CategoriesActionType.SET_LOADING });
 
             const { data } = await fetchCategory(categoryId);
             const fetchedCategory: Category = data;
@@ -34,27 +36,34 @@ const EditCategory = () => {
         } catch (err) {
             alert(err);
         } finally {
-            appDispatch({ type: AppActionType.LOADING, payload: false });
+            categoriesDispatch({ type: CategoriesActionType.SET_LOADING, payload: false });
         }
-    };
+    }, [categoriesDispatch, categoryId]);
 
     const handleEditCategory = async (event: React.FormEvent) => {
         event.preventDefault();
         setSuccess(false);
         if (categoryName.trim() === '') return;
+        if (!category) return;
 
         try {
-            appDispatch({ type: AppActionType.LOADING, payload: true });
-            const updatedCategory: Category = { ...category!, name: categoryName };
+            categoriesDispatch({ type: CategoriesActionType.SET_LOADING });
 
-            const status = await editCategory(updatedCategory, category!.id);
-
-            appDispatch({ type: AppActionType.UPDATE_APP, payload: true });
+            const updatedCategory = await editCategory({
+                ...category,
+                name: categoryName,
+            });
+            categoriesDispatch({
+                type: CategoriesActionType.UPDATE_CATEGORY,
+                payload: updatedCategory,
+            });
+            productsDispatch({
+                type: ProductsActionType.UPDATE_PRODUCT_CATEGORY,
+                payload: updatedCategory,
+            });
             setSuccess(true);
         } catch (err) {
             alert(err);
-        } finally {
-            appDispatch({ type: AppActionType.LOADING, payload: false });
         }
     };
 
@@ -63,7 +72,7 @@ const EditCategory = () => {
 
     useEffect(() => {
         getCategory();
-    }, []);
+    }, [getCategory]);
 
     return (
         <Container>

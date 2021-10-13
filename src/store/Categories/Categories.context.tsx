@@ -1,6 +1,4 @@
-import React, { createContext, useEffect, useReducer } from 'react';
-import { useApp } from 'src/hooks/useApp';
-import { AppActionType } from '../App/App.types';
+import React, { createContext, useCallback, useEffect, useReducer } from 'react';
 import { fetchCategories } from './Categories.services';
 import {
     CategoriesActions,
@@ -14,15 +12,35 @@ export const CategoriesContext = createContext({} as ProviderValue);
 
 const initialState: CategoriesState = {
     categories: [],
+    loading: false,
+    error: undefined,
 };
 
 const reducer = (state: CategoriesState, action: CategoriesActions) => {
     switch (action.type) {
         case CategoriesActionType.GET_CATEGORIES:
             return {
+                ...state,
                 categories: action.payload,
+                loading: false,
             };
-
+        case CategoriesActionType.UPDATE_CATEGORY:
+            const updatedCategoies = state.categories.map(category => {
+                if (category.id === action.payload.id) {
+                    return action.payload;
+                }
+                return category;
+            });
+            return {
+                ...state,
+                categories: updatedCategoies,
+                loading: false,
+            };
+        case CategoriesActionType.SET_LOADING:
+            return {
+                ...state,
+                loading: action.payload ?? true,
+            };
         default:
             return state;
     }
@@ -30,14 +48,10 @@ const reducer = (state: CategoriesState, action: CategoriesActions) => {
 
 const CategoriesProvider: React.FC = ({ children }) => {
     const [categoriesState, categoriesDispatch] = useReducer(reducer, initialState);
-    const {
-        appDispatch,
-        appState: { updateApp },
-    } = useApp();
 
-    const getCategories = async () => {
+    const getCategories = useCallback(async () => {
         try {
-            appDispatch({ type: AppActionType.LOADING, payload: true });
+            categoriesDispatch({ type: CategoriesActionType.SET_LOADING });
 
             const { data } = await fetchCategories();
             const categories: Category[] = data;
@@ -45,18 +59,11 @@ const CategoriesProvider: React.FC = ({ children }) => {
             categoriesDispatch({ type: CategoriesActionType.GET_CATEGORIES, payload: categories });
         } catch (err) {
             alert(err);
-        } finally {
-            appDispatch({ type: AppActionType.LOADING, payload: false });
-            appDispatch({ type: AppActionType.UPDATE_APP, payload: false });
         }
-    };
-
-    useEffect(() => {
-        if (updateApp) getCategories();
-    }, [updateApp]);
+    }, []);
 
     return (
-        <CategoriesContext.Provider value={{ categoriesState, categoriesDispatch }}>
+        <CategoriesContext.Provider value={{ categoriesState, categoriesDispatch, getCategories }}>
             {children}
         </CategoriesContext.Provider>
     );
