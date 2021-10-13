@@ -7,6 +7,7 @@ const initialState: AppState = {
     loading: false,
     error: false,
     errorMessage: '',
+    updateApp: true,
 };
 
 const reducer = (state: AppState, action: AppActions) => {
@@ -15,6 +16,11 @@ const reducer = (state: AppState, action: AppActions) => {
             return {
                 ...state,
                 loading: action.payload,
+            };
+        case AppActionType.UPDATE_APP:
+            return {
+                ...state,
+                updateApp: action.payload,
             };
 
         default:

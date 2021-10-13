@@ -30,7 +30,10 @@ const reducer = (state: CategoriesState, action: CategoriesActions) => {
 
 const CategoriesProvider: React.FC = ({ children }) => {
     const [categoriesState, categoriesDispatch] = useReducer(reducer, initialState);
-    const { appDispatch } = useApp();
+    const {
+        appDispatch,
+        appState: { updateApp },
+    } = useApp();
 
     const getCategories = async () => {
         try {
@@ -44,12 +47,13 @@ const CategoriesProvider: React.FC = ({ children }) => {
             alert(err);
         } finally {
             appDispatch({ type: AppActionType.LOADING, payload: false });
+            appDispatch({ type: AppActionType.UPDATE_APP, payload: false });
         }
     };
 
     useEffect(() => {
-        getCategories();
-    }, []);
+        if (updateApp) getCategories();
+    }, [updateApp]);
 
     return (
         <CategoriesContext.Provider value={{ categoriesState, categoriesDispatch }}>

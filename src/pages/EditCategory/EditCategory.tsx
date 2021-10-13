@@ -48,8 +48,8 @@ const EditCategory = () => {
             const updatedCategory: Category = { ...category!, name: categoryName };
 
             const status = await editCategory(updatedCategory, category!.id);
-           
-            // productsDispatch({ type: ProductsActionType.UPDATE_PRODUCTS, payload: true });
+
+            appDispatch({ type: AppActionType.UPDATE_APP, payload: true });
             setSuccess(true);
         } catch (err) {
             alert(err);

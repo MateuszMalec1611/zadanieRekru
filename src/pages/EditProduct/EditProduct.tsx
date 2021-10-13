@@ -25,8 +25,6 @@ const EditProduct = () => {
         appDispatch,
         appState: { loading },
     } = useApp();
-    const { productsDispatch } = useProducts();
-
     const { id } = useParams<ParamsProps>();
     const productId = +id;
 
@@ -75,7 +73,8 @@ const EditProduct = () => {
                 id: selectedCategory.value,
             };
             const status = await editProduct(updatedProduct, product!.id);
-            productsDispatch({ type: ProductsActionType.UPDATE_PRODUCTS, payload: true });
+
+            appDispatch({ type: AppActionType.UPDATE_APP, payload: true });
             setSelectedCategory(undefined);
             setSuccess(true);
         } catch (err) {
