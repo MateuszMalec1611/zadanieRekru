@@ -22,6 +22,11 @@ export type UpdateProduct = {
     payload: Product;
 };
 
+export type UpdateProductCategory = {
+    type: ProductsActionType.UPDATE_PRODUCT_CATEGORY;
+    payload: Category;
+};
+
 export type SetLoading = {
     type: ProductsActionType.SET_LOADING;
     payload?: boolean;
@@ -38,11 +43,12 @@ export type Product = {
     type: string;
 };
 
-export type ProductsActions = SetProducts | UpdateProduct | SetLoading;
+export type ProductsActions = SetProducts | UpdateProduct | UpdateProductCategory | SetLoading;
 
 export enum ProductsActionType {
     ADD_PRODUCT = 'ADD_PRODUCT',
     SET_PRODUCTS = 'GET_PRODUCTS',
     UPDATE_PRODUCT = 'UPDATE_PRODUCT',
+    UPDATE_PRODUCT_CATEGORY = 'UPDATE_PRODUCT_CATEGORY',
     SET_LOADING = 'SET_LOADING',
 }

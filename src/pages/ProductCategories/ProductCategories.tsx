@@ -1,20 +1,24 @@
+import { useEffect } from 'react';
 import { Col, Container, ListGroup, Row, Spinner } from 'react-bootstrap';
 import Category from 'src/components/Category/Category';
 import PageTitle from 'src/components/PageTitle/PageTitle';
-import { useApp } from 'src/hooks/useApp';
 import { useCategories } from 'src/hooks/useCategories';
 
 const ProductCategories = () => {
     const {
-        categoriesState: { categories },
+        categoriesState: { categories, loading },
+        getCategories,
     } = useCategories();
-    const {
-        appState: { loading },
-    } = useApp();
 
     const categoriesList = categories.map(category => (
         <Category key={category.uid} category={category} />
     ));
+
+    useEffect(() => {
+        if (!categories.length) {
+            getCategories();
+        }
+    }, [categories, getCategories]);
 
     return (
         <Container>

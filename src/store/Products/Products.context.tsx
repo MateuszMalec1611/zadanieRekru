@@ -36,6 +36,21 @@ const reducer = (state: ProductsState, action: ProductsActions) => {
                 products: updatedProducts,
                 loading: false,
             };
+        case ProductsActionType.UPDATE_PRODUCT_CATEGORY:
+            const updatedProductsCategory = state.products.map(product => {
+                if (product.category.id === action.payload.id) {
+                    return {
+                        ...product,
+                        category: action.payload,
+                    };
+                }
+                return product;
+            });
+            return {
+                ...state,
+                products: updatedProductsCategory,
+                loading: false,
+            };
         case ProductsActionType.SET_LOADING:
             return {
                 ...state,
