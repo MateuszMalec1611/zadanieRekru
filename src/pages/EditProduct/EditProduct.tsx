@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Col, Container, Form, Row, Button } from 'react-bootstrap';
 import { useParams } from 'react-router';
-import { fetchProduct } from 'src/store/Products/Products.services';
+import { editProduct, fetchProduct } from 'src/store/Products/Products.services';
 import PageTitle from 'src/components/PageTitle/PageTitle';
 import { useApp } from 'src/hooks/useApp';
 import { AppActionType } from 'src/store/App/App.types';
@@ -17,7 +17,8 @@ type SelectedOption = { label: string; value: number };
 
 const EditProduct = () => {
     const [productName, setProductName] = useState('');
-    const [categoryId, setCategoryId] = useState<number>();
+    const [product, setProduct] = useState<Product>();
+    const [selectedCategory, setSelectedCategory] = useState<SelectedOption>();
     const {
         appDispatch,
         appState: { loading },
@@ -31,9 +32,10 @@ const EditProduct = () => {
             appDispatch({ type: AppActionType.LOADING, payload: true });
 
             const { data } = await fetchProduct(productId);
-            const product: Product = data;
+            const fetchedProduct: Product = data;
 
-            setProductName(product.name);
+            setProductName(fetchedProduct.name);
+            setProduct(fetchedProduct);
         } catch (err) {
             alert(err);
         } finally {
@@ -51,11 +53,37 @@ const EditProduct = () => {
         }));
     };
 
+    const handleEditProduct = async (event: React.FormEvent) => {
+        event.preventDefault();
+        if (!selectedCategory?.value || productName.trim() === '') return;
+
+        try {
+            appDispatch({ type: AppActionType.LOADING, payload: true });
+            const updatedProduct = {
+                ...product!,
+                category: {
+                    ...product!.category!,
+                    id: selectedCategory.value,
+                    name: selectedCategory.label,
+                },
+                name: productName,
+                category_id: selectedCategory.value,
+                id: selectedCategory.value,
+            };
+            const status = await editProduct(updatedProduct, product!.id);
+            setSelectedCategory(undefined);
+        } catch (err) {
+            alert(err);
+        } finally {
+            appDispatch({ type: AppActionType.LOADING, payload: false });
+        }
+    };
+
     const handleNameInput = ({ target }: React.ChangeEvent<HTMLInputElement>) =>
         setProductName(target.value);
 
     const handleCategoryChange = (selectedOptions?: SelectedOption | null) =>
-        setCategoryId(selectedOptions!.value);
+        setSelectedCategory(selectedOptions!);
 
     useEffect(() => {
         getProduct();
@@ -69,7 +97,10 @@ const EditProduct = () => {
                     {loading ? (
                         <p>loading</p>
                     ) : (
-                        <Form className="d-flex flex-column" style={{ width: 400 }}>
+                        <Form
+                            onSubmit={handleEditProduct}
+                            className="d-flex flex-column"
+                            style={{ width: 400 }}>
                             <Form.Group className="mb-3">
                                 <Form.Label>Nazwa produktu</Form.Label>
                                 <Form.Control
