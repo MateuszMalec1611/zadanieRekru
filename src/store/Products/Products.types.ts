@@ -50,7 +50,7 @@ export type Product = {
     name: string;
     id: number;
     category: Category;
-    category_id: number;
+    category_id?: number;
     measure_type: string;
     tax_id: number;
     type: string;

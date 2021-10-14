@@ -15,6 +15,8 @@ export const translateErrorMessages = (code?: string) => {
             return 'Nazwa nie może być pusta';
         case 'name_constraints.nameisunique':
             return 'Podana nazwa już istnieje';
+        case 'name_product_with_name_exists':
+            return 'Podana nazwa już istnieje';
         default:
             break;
     }

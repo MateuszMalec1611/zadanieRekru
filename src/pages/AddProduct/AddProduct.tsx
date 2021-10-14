@@ -45,6 +45,7 @@ const AddProduct = () => {
             setError({ isError: false, errorMessage: '' });
             setValidationErrors(undefined);
             setOnSuccess(true);
+            setProductName('');
         } catch (err: any) {
             if (err.response?.status === 422) {
                 return setValidationErrors(err.response?.data);

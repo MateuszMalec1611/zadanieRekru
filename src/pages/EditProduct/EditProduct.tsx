@@ -5,10 +5,12 @@ import { editProduct, fetchProduct } from 'src/store/Products/Products.services'
 import PageTitle from 'src/components/PageTitle/PageTitle';
 import { Product, ProductsActionType } from 'src/store/Products/Products.types';
 import { fetchCategorySelect } from 'src/store/Categories/Categories.services';
-import { formatDataForSelect } from 'src/utils/helpers';
+import { formatDataForSelect, translateErrorMessages } from 'src/utils/helpers';
 import { useProducts } from 'src/hooks/useProducts';
 import { SelectedOption } from 'src/types/select.types';
 import SelectAsync from 'src/components/SelectAsync/SelectAsync';
+import { FormValidationError } from 'src/types/error.types';
+import { FormFieldNames } from 'src/types/form.types';
 
 type ParamsProps = {
     id: string;
@@ -17,6 +19,7 @@ type ParamsProps = {
 const EditProduct = () => {
     const [productName, setProductName] = useState('');
     const [error, setError] = useState({ isError: false, errorMessage: '' });
+    const [validationErrors, setValidationErrors] = useState<FormValidationError | undefined>();
     const [onSuccess, setOnSuccess] = useState(false);
     const [product, setProduct] = useState<Product>();
     const [selectedCategory, setSelectedCategory] = useState<SelectedOption>();
@@ -29,7 +32,7 @@ const EditProduct = () => {
 
     const getProduct = useCallback(async () => {
         try {
-            productsDispatch({ type: ProductsActionType.SET_LOADING });       
+            productsDispatch({ type: ProductsActionType.SET_LOADING });
             const { data } = await fetchProduct(productId);
             const fetchedProduct: Product = data;
 
@@ -46,30 +49,36 @@ const EditProduct = () => {
     const handleEditProduct = async (event: React.FormEvent) => {
         event.preventDefault();
         setOnSuccess(false);
-        if (!product) return;
-        if (!selectedCategory?.value || productName.trim() === '') {
-            setError({ isError: true, errorMessage: 'Nazwa musi być dłuższa niz jeden znak' });
-            return;
-        }
 
         try {
             productsDispatch({ type: ProductsActionType.SET_LOADING });
             const updatedProduct = await editProduct({
-                ...product,
+                ...product!,
                 name: productName,
-                category_id: selectedCategory.value,
+                category_id: selectedCategory?.value,
             });
 
             productsDispatch({ type: ProductsActionType.UPDATE_PRODUCT, payload: updatedProduct });
             setError({ isError: false, errorMessage: '' });
+            setValidationErrors(undefined);
             setOnSuccess(true);
         } catch (err: any) {
+            if (err.response?.status === 422) {
+                return setValidationErrors(err.response?.data);
+            }
             setError({ isError: true, errorMessage: err.message });
+        } finally {
+            productsDispatch({ type: ProductsActionType.SET_LOADING, payload: false });
         }
     };
 
     const handleNameInput = ({ target }: React.ChangeEvent<HTMLInputElement>) =>
         setProductName(target.value);
+
+    const validateField = (name: string) =>
+        validationErrors?.errors.some((err: { field: string }) => err.field === name);
+    const getError = (name: string) =>
+        validationErrors?.errors.find((err: { field: string }) => err.field === name);
 
     useEffect(() => {
         getProduct();
@@ -94,7 +103,11 @@ const EditProduct = () => {
                                     value={productName}
                                     type="text"
                                     placeholder="Wpisz nazwę produktu"
+                                    isInvalid={validateField(FormFieldNames.NAME)}
                                 />
+                                <Form.Control.Feedback type="invalid">
+                                    {translateErrorMessages(getError(FormFieldNames.NAME)?.code)}
+                                </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Nazwa kategorii</Form.Label>
