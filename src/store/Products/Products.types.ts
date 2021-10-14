@@ -11,6 +11,7 @@ export interface ProductsState {
     products: Product[];
     loading: boolean;
     error: ErrorType;
+    areDownloaded: boolean;
 }
 
 export type AddProduct = {
@@ -50,7 +51,7 @@ export type Product = {
     name: string;
     id: number;
     category: Category;
-    category_id: number;
+    category_id?: number;
     measure_type: string;
     tax_id: number;
     type: string;
@@ -58,16 +59,16 @@ export type Product = {
 };
 
 export type ProductToAdd = {
-    name: string;
-    measure_type: string;
-    category_id: number;
-    tax_id: number;
-    type: 'BASIC';
+    name?: string;
+    measure_type?: string;
+    category_id?: number;
+    tax_id?: number;
+    type?: 'BASIC';
 };
 
 export type Tax = {
-    id: 4;
-    name: '0%';
+    id: number;
+    name: string;
 };
 
 export type ProductsActions =

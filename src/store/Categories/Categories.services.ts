@@ -3,7 +3,9 @@ import api from 'src/api';
 import { Category } from './Categories.types';
 
 export const fetchCategories = async () => {
-    const { data }: AxiosResponse<{ data: Category[]; error: any[] }> = await api().get('/product_categories');
+    const { data }: AxiosResponse<{ data: Category[]; error: any[] }> = await api().get(
+        '/product_categories'
+    );
     return data;
 };
 
@@ -11,7 +13,7 @@ export const fetchCategory = async (id: number) => {
     const { data }: AxiosResponse<{ data: Category; error: any[] }> = await api().get(
         `/product_categories/${id}`
     );
-    return data;
+    return data.data;
 };
 
 export const fetchCategorySelect = async (categoryName: string) => {

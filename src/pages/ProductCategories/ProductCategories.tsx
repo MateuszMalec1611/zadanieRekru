@@ -10,6 +10,7 @@ const ProductCategories = () => {
             categories,
             loading,
             error: { isError, errorMessage },
+            areDownloaded,
         },
         getCategories,
     } = useCategories();
@@ -19,10 +20,10 @@ const ProductCategories = () => {
     ));
 
     useEffect(() => {
-        if (!categories.length) {
+        if (!areDownloaded) {
             getCategories();
         }
-    }, [categories, getCategories]);
+    }, [areDownloaded, getCategories]);
 
     return (
         <Container>
@@ -32,6 +33,9 @@ const ProductCategories = () => {
                     {loading && !isError && <Spinner animation="border" />}
                     {!loading && !isError && !!categoriesList.length && (
                         <ListGroup style={{ width: 500 }}>{categoriesList}</ListGroup>
+                    )}
+                    {!loading && !categoriesList.length && !isError && (
+                        <p className="text-center">Brak kategorii</p>
                     )}
                     {isError && <Alert variant="danger">{errorMessage}</Alert>}
                 </Col>

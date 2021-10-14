@@ -1,23 +1,44 @@
-import { Nav } from 'react-bootstrap';
+import { Image, Nav } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import productIco from 'src/img/product.svg';
+import categoryIco from 'src/img/category.svg';
+import addProductIco from 'src/img/addProduct.svg';
+import addCategoryIco from 'src/img/addCategory.svg';
 
 const Sidebar = () => (
     <>
-        <Nav className="col-md-12 flex-column h-100 bg-dark" activeKey="/home">
+        <Nav className="col-md-12 flex-column h-100 bg-dark fs-5" activeKey="/home">
             <LinkContainer to="/" className="border-bottom ">
-                <Nav.Link className="text-light">Strona Główna</Nav.Link>
-            </LinkContainer>
-            <LinkContainer to="/products-list" className="border-bottom">
-                <Nav.Link className="text-light">Produkty</Nav.Link>
+                <Nav.Link className="text-light ">
+                    <div className="d-flex align-items-center">
+                        <Image className="me-2" src={productIco} />
+                        <p className="m-0 d-none d-md-block">Produkty</p>
+                    </div>
+                </Nav.Link>
             </LinkContainer>
             <LinkContainer to="/product-categories" className="border-bottom">
-                <Nav.Link className="text-light">Kategorie</Nav.Link>
+                <Nav.Link className="text-light ">
+                    <div className="d-flex align-items-center">
+                        <Image className="me-2" src={categoryIco} />
+                        <p className="m-0 d-none d-md-block">Kategorie</p>
+                    </div>
+                </Nav.Link>
             </LinkContainer>
             <LinkContainer to="/add-product" className="border-bottom ">
-                <Nav.Link className="text-light">Dodaj Produkt</Nav.Link>
+                <Nav.Link className="text-light ">
+                    <div className="d-flex align-items-center">
+                        <Image className="me-2" src={addProductIco} />
+                        <p className="m-0 d-none d-none d-md-block">Dodaj Produkt</p>
+                    </div>
+                </Nav.Link>
             </LinkContainer>
             <LinkContainer to="/add-category" className="border-bottom ">
-                <Nav.Link className="text-light">Dodaj Kategorię</Nav.Link>
+                <Nav.Link className="text-light ">
+                    <div className="d-flex align-items-center">
+                        <Image className="me-2" src={addCategoryIco} />
+                        <p className="m-0 d-none d-md-block">Dodaj Kategorię</p>
+                    </div>
+                </Nav.Link>
             </LinkContainer>
         </Nav>
     </>

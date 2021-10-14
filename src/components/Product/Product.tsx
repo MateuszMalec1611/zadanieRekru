@@ -1,13 +1,13 @@
-import { ListGroup, Button } from 'react-bootstrap';
+import { ListGroup, Button, Image } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 import { Product as ProductType } from 'src/store/Products/Products.types';
+import editIco from 'src/img/edit.svg';
 
 interface ProductProps {
     product: ProductType;
-    editOption?: boolean;
 }
 
-const Product: React.FC<ProductProps> = ({ product: { name, category, id }, editOption }) => {
+const Product: React.FC<ProductProps> = ({ product: { name, category, id } }) => {
     const history = useHistory();
     const categoryName = category.name;
 
@@ -18,11 +18,9 @@ const Product: React.FC<ProductProps> = ({ product: { name, category, id }, edit
             <h4 className="m-0 text-uppercase">{name}</h4>
             <div className="d-flex align-items-center">
                 <p className="m-0 text-uppercase display-7">{categoryName}</p>
-                {editOption && (
-                    <Button onClick={handleButton} className="ms-3 text-uppercase" variant="dark">
-                        edit
-                    </Button>
-                )}
+                <Button onClick={handleButton} className="ms-3 text-uppercase" variant="dark">
+                    <Image className="me-2" src={editIco} />
+                </Button>
             </div>
         </ListGroup.Item>
     );

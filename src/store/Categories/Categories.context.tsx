@@ -17,23 +17,25 @@ const initialState: CategoriesState = {
         isError: false,
         errorMessage: '',
     },
+    areDownloaded: false,
 };
 
 const reducer = (state: CategoriesState, action: CategoriesActions) => {
     switch (action.type) {
         case CategoriesActionType.ADD_CATEGORY:
             let newCategoryList: [] | Category[] = [];
-            if (!!state.categories.length) newCategoryList = [...state.categories, action.payload];
+            if (state.areDownloaded) newCategoryList = [...state.categories, action.payload];
             return {
                 ...state,
                 categories: newCategoryList,
                 loading: false,
             };
-        case CategoriesActionType.GET_CATEGORIES:
+        case CategoriesActionType.SET_CATEGORIES:
             return {
                 ...state,
                 categories: action.payload,
                 loading: false,
+                areDownloaded: true,
             };
         case CategoriesActionType.UPDATE_CATEGORY:
             const updatedCategoies = state.categories.map(category => {
@@ -76,7 +78,7 @@ const CategoriesProvider: React.FC = ({ children }) => {
             const { data } = await fetchCategories();
             const categories: Category[] = data;
 
-            categoriesDispatch({ type: CategoriesActionType.GET_CATEGORIES, payload: categories });
+            categoriesDispatch({ type: CategoriesActionType.SET_CATEGORIES, payload: categories });
         } catch (err: any) {
             categoriesDispatch({
                 type: CategoriesActionType.SET_ERROR,

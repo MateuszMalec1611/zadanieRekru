@@ -1,4 +1,4 @@
-import { ErrorType } from "src/types/error.types";
+import { ErrorType } from 'src/types/error.types';
 
 export type ProviderValue = {
     categoriesState: CategoriesState;
@@ -10,6 +10,7 @@ export interface CategoriesState {
     categories: Category[];
     loading: boolean;
     error: ErrorType;
+    areDownloaded: boolean;
 }
 
 export type AddCategory = {
@@ -18,7 +19,7 @@ export type AddCategory = {
 };
 
 export type GetCategories = {
-    type: CategoriesActionType.GET_CATEGORIES;
+    type: CategoriesActionType.SET_CATEGORIES;
     payload: Category[];
 };
 
@@ -41,11 +42,11 @@ export type SetError = {
 };
 
 export type Category = {
-    id: number;
-    name: string;
-    status: string;
-    uid: string;
-    updated_at: string;
+    id?: number;
+    name?: string;
+    status?: string;
+    uid?: string;
+    updated_at?: string;
 };
 
 export type CategoriesActions =
@@ -57,7 +58,7 @@ export type CategoriesActions =
 
 export enum CategoriesActionType {
     ADD_CATEGORY = 'ADD_CATEGORY',
-    GET_CATEGORIES = 'GET_CATEGORIES',
+    SET_CATEGORIES = 'SET_CATEGORIES',
     UPDATE_CATEGORY = 'UPDATE_CATEGORY',
     SET_LOADING = 'SET_LOADING',
     SET_ERROR = 'SET_ERROR',

@@ -7,6 +7,9 @@ import { editCategory, fetchCategory } from 'src/store/Categories/Categories.ser
 import { useCategories } from 'src/hooks/useCategories';
 import { useProducts } from 'src/hooks/useProducts';
 import { ProductsActionType } from 'src/store/Products/Products.types';
+import { FormValidationError } from 'src/types/error.types';
+import { FormFieldNames } from 'src/types/form.types';
+import { translateErrorMessages } from 'src/utils/helpers';
 
 type ParamsProps = {
     id: string;
@@ -15,8 +18,9 @@ type ParamsProps = {
 const EditCategory = () => {
     const [categoryName, setCategoryName] = useState('');
     const [error, setError] = useState({ isError: false, errorMessage: '' });
-    const [category, setCategory] = useState<Category>();
+    const [validationErrors, setValidationErrors] = useState<FormValidationError | undefined>();
     const [onSuccess, setOnSuccess] = useState(false);
+    const [category, setCategory] = useState<Category>();
     const { id } = useParams<ParamsProps>();
     const categoryId = +id;
     const {
@@ -28,11 +32,9 @@ const EditCategory = () => {
     const getCategory = useCallback(async () => {
         try {
             categoriesDispatch({ type: CategoriesActionType.SET_LOADING });
+            const fetchedCategory = await fetchCategory(categoryId);
 
-            const { data } = await fetchCategory(categoryId);
-            const fetchedCategory: Category = data;
-
-            setCategoryName(fetchedCategory.name);
+            setCategoryName(fetchedCategory.name!);
             setCategory(fetchedCategory);
         } catch (err: any) {
             setError({ isError: true, errorMessage: err.message });
@@ -42,13 +44,8 @@ const EditCategory = () => {
     }, [categoriesDispatch, categoryId]);
 
     const handleEditCategory = async (event: React.FormEvent) => {
-        event.preventDefault();
         setOnSuccess(false);
-        if (categoryName.trim() === '') {
-            setError({ isError: true, errorMessage: 'Nazwa musi być dłuższa niz jeden znak' });
-            return;
-        }
-        if (!category) return;
+        event.preventDefault();
 
         try {
             categoriesDispatch({ type: CategoriesActionType.SET_LOADING });
@@ -66,14 +63,26 @@ const EditCategory = () => {
                 payload: updatedCategory,
             });
             setError({ isError: false, errorMessage: '' });
+            setValidationErrors(undefined);
             setOnSuccess(true);
         } catch (err: any) {
+            if (err.response?.status === 422) {
+                return setValidationErrors(err.response?.data);
+            }
             setError({ isError: true, errorMessage: err.message });
+        } finally {
+            categoriesDispatch({ type: CategoriesActionType.SET_LOADING, payload: false });
         }
     };
 
     const handleCategoryName = ({ target }: React.ChangeEvent<HTMLInputElement>) =>
         setCategoryName(target.value);
+
+    const validateField = (name: string) =>
+        validationErrors?.errors.some((err: { field: string }) => err.field === name);
+    const getError = (name: string) =>
+        validationErrors?.errors.find((err: { field: string }) => err.field === name);
+    
 
     useEffect(() => {
         getCategory();
@@ -98,7 +107,11 @@ const EditCategory = () => {
                                     value={categoryName}
                                     type="text"
                                     placeholder="Wpisz nazwę kategorii"
+                                    isInvalid={validateField(FormFieldNames.NAME)}
                                 />
+                                <Form.Control.Feedback type="invalid">
+                                    {translateErrorMessages(getError(FormFieldNames.NAME)?.code)}
+                                </Form.Control.Feedback>
                             </Form.Group>
                             <Button variant="dark" type="submit">
                                 Zapisz

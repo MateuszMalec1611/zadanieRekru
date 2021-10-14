@@ -17,13 +17,14 @@ const initialState: ProductsState = {
         isError: false,
         errorMessage: '',
     },
+    areDownloaded: false,
 };
 
 const reducer = (state: ProductsState, action: ProductsActions) => {
     switch (action.type) {
         case ProductsActionType.ADD_PRODUCT:
             let newProductList: [] | Product[] = [];
-            if (!!state.products.length) newProductList = [...state.products, action.payload];
+            if (state.areDownloaded) newProductList = [...state.products, action.payload];
             return {
                 ...state,
                 products: newProductList,
@@ -36,6 +37,7 @@ const reducer = (state: ProductsState, action: ProductsActions) => {
                 products: action.payload,
                 loading: false,
                 error: { isError: false, errorMessage: '' },
+                areDownloaded: true,
             };
         case ProductsActionType.UPDATE_PRODUCT:
             const updatedProducts = state.products.map(product => {
