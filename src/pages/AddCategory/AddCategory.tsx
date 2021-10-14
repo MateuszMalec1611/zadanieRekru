@@ -8,7 +8,7 @@ import { CategoriesActionType } from 'src/store/Categories/Categories.types';
 const AddCategory = () => {
     const [categoryName, setCategoryName] = useState('');
     const [onSuccess, setOnSuccess] = useState(false);
-
+    const [error, setError] = useState({ isError: false, errorMessage: '' });
     const {
         categoriesDispatch,
         categoriesState: { loading },
@@ -17,7 +17,10 @@ const AddCategory = () => {
     const handleAddCategory = async (event: React.FormEvent) => {
         event.preventDefault();
         setOnSuccess(false);
-        if (categoryName.trim() === '') return;
+        if (categoryName.trim() === '') {
+            setError({ isError: true, errorMessage: 'Nazwa musi być dłuższa niz jeden znak' });
+            return;
+        }
 
         try {
             categoriesDispatch({ type: CategoriesActionType.SET_LOADING });
@@ -27,9 +30,12 @@ const AddCategory = () => {
 
             categoriesDispatch({ type: CategoriesActionType.ADD_CATEGORY, payload: newCategory });
 
+            setError({ isError: false, errorMessage: '' });
             setOnSuccess(true);
-        } catch (err) {
-            alert(err);
+            setCategoryName('');
+        } catch (err: any) {
+            setError({ isError: true, errorMessage: err.message });
+            categoriesDispatch({ type: CategoriesActionType.SET_LOADING, payload: false });
         }
     };
 
@@ -60,9 +66,11 @@ const AddCategory = () => {
                             <Button className="w-max-content" variant="dark" type="submit">
                                 Zapisz
                             </Button>
-                            {onSuccess && (
-                                <Alert className="mt-4 text-center" variant="success">
-                                    Pomyślnie dodano kategorie
+                            {(onSuccess || error.isError) && (
+                                <Alert
+                                    className="mt-4 text-center"
+                                    variant={onSuccess ? 'success' : 'danger'}>
+                                    {onSuccess ? 'Pomyślnie dodano kategorie' : error.errorMessage}
                                 </Alert>
                             )}
                         </Form>

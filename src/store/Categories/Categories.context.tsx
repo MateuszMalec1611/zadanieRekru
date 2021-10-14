@@ -13,7 +13,10 @@ export const CategoriesContext = createContext({} as ProviderValue);
 const initialState: CategoriesState = {
     categories: [],
     loading: false,
-    error: undefined,
+    error: {
+        isError: false,
+        errorMessage: '',
+    },
 };
 
 const reducer = (state: CategoriesState, action: CategoriesActions) => {
@@ -49,6 +52,15 @@ const reducer = (state: CategoriesState, action: CategoriesActions) => {
                 ...state,
                 loading: action.payload ?? true,
             };
+        case CategoriesActionType.SET_ERROR:
+            return {
+                ...state,
+                error: {
+                    isError: action.payload.isError ?? true,
+                    errorMessage: action.payload.errorMessage ?? '',
+                },
+                loading: false,
+            };
         default:
             return state;
     }
@@ -65,8 +77,11 @@ const CategoriesProvider: React.FC = ({ children }) => {
             const categories: Category[] = data;
 
             categoriesDispatch({ type: CategoriesActionType.GET_CATEGORIES, payload: categories });
-        } catch (err) {
-            alert(err);
+        } catch (err: any) {
+            categoriesDispatch({
+                type: CategoriesActionType.SET_ERROR,
+                payload: { errorMessage: err.message },
+            });
         }
     }, []);
 

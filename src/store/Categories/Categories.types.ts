@@ -1,3 +1,5 @@
+import { ErrorType } from "src/types/error.types";
+
 export type ProviderValue = {
     categoriesState: CategoriesState;
     categoriesDispatch: (action: CategoriesActions) => void;
@@ -7,7 +9,7 @@ export type ProviderValue = {
 export interface CategoriesState {
     categories: Category[];
     loading: boolean;
-    error?: Error;
+    error: ErrorType;
 }
 
 export type AddCategory = {
@@ -30,6 +32,14 @@ export type SetLoading = {
     payload?: boolean;
 };
 
+export type SetError = {
+    type: CategoriesActionType.SET_ERROR;
+    payload: {
+        isError?: boolean;
+        errorMessage?: string;
+    };
+};
+
 export type Category = {
     id: number;
     name: string;
@@ -38,11 +48,17 @@ export type Category = {
     updated_at: string;
 };
 
-export type CategoriesActions = AddCategory | GetCategories | UpdateCategory | SetLoading;
+export type CategoriesActions =
+    | AddCategory
+    | GetCategories
+    | UpdateCategory
+    | SetLoading
+    | SetError;
 
 export enum CategoriesActionType {
     ADD_CATEGORY = 'ADD_CATEGORY',
     GET_CATEGORIES = 'GET_CATEGORIES',
     UPDATE_CATEGORY = 'UPDATE_CATEGORY',
     SET_LOADING = 'SET_LOADING',
+    SET_ERROR = 'SET_ERROR',
 }

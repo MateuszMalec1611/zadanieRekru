@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Col, Container, ListGroup, Row, Spinner } from 'react-bootstrap';
+import { Alert, Col, Container, ListGroup, Row, Spinner } from 'react-bootstrap';
 import { useProducts } from 'src/hooks/useProducts';
 import PageTitle from 'src/components/PageTitle/PageTitle';
 import Product from 'src/components/Product/Product';
@@ -10,7 +10,11 @@ interface ProductListProps {
 
 const ProductList: React.FC<ProductListProps> = ({ editOption }) => {
     const {
-        productsState: { products, loading },
+        productsState: {
+            products,
+            loading,
+            error: { isError, errorMessage },
+        },
         getProducts,
     } = useProducts();
 
@@ -29,17 +33,19 @@ const ProductList: React.FC<ProductListProps> = ({ editOption }) => {
             <PageTitle>Lista produktów</PageTitle>
             <Row>
                 <Col className="d-flex justify-content-center">
-                    {loading ? (
-                        <Spinner animation="border" />
-                    ) : (
-                        <ListGroup style={{ width: 500 }}>
-                            {products.length === 0 ? <p>Brak produktów</p> : productsList}
-                        </ListGroup>
+                    {loading && !isError && <Spinner animation="border" />}
+                    {!loading && !isError && !!productsList.length && (
+                        <ListGroup style={{ width: 500 }}>{productsList}</ListGroup>
                     )}
+                    {!productsList.length && !isError && (
+                        <p className="text-center">Brak produktów</p>
+                    )}
+                    {isError && <Alert variant="danger">{errorMessage}</Alert>}
                 </Col>
             </Row>
         </Container>
     );
 };
+//
 
 export default ProductList;
