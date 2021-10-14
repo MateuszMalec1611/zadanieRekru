@@ -4,11 +4,11 @@ import { useParams } from 'react-router';
 import { editProduct, fetchProduct } from 'src/store/Products/Products.services';
 import PageTitle from 'src/components/PageTitle/PageTitle';
 import { Product, ProductsActionType } from 'src/store/Products/Products.types';
-import AsyncSelect from 'react-select/async';
 import { fetchCategorySelect } from 'src/store/Categories/Categories.services';
 import { formatDataForSelect } from 'src/utils/helpers';
 import { useProducts } from 'src/hooks/useProducts';
 import { SelectedOption } from 'src/types/select.types';
+import SelectAsync from 'src/components/SelectAsync/SelectAsync';
 
 type ParamsProps = {
     id: string;
@@ -43,12 +43,6 @@ const EditProduct = () => {
         }
     }, [productId, productsDispatch]);
 
-    const searchCategories = async (searchValue: string) => {
-        const categories = await fetchCategorySelect(searchValue);
-
-        return categories.map(category => formatDataForSelect(category));
-    };
-
     const handleEditProduct = async (event: React.FormEvent) => {
         event.preventDefault();
         setOnSuccess(false);
@@ -72,9 +66,6 @@ const EditProduct = () => {
 
     const handleNameInput = ({ target }: React.ChangeEvent<HTMLInputElement>) =>
         setProductName(target.value);
-
-    const handleCategoryChange = (selectedOption?: SelectedOption | null) =>
-        setSelectedCategory(selectedOption!);
 
     useEffect(() => {
         getProduct();
@@ -103,12 +94,10 @@ const EditProduct = () => {
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Nazwa kategorii</Form.Label>
-                                <AsyncSelect
-                                    cacheOptions
-                                    defaultOptions
-                                    value={selectedCategory}
-                                    loadOptions={searchCategories}
-                                    onChange={handleCategoryChange}
+                                <SelectAsync
+                                    selectedValue={selectedCategory}
+                                    fetchValues={fetchCategorySelect}
+                                    onChangeValue={setSelectedCategory}
                                 />
                             </Form.Group>
                             <Button variant="dark" type="submit">

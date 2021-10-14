@@ -34,4 +34,3 @@ export const fetchTaxes = async (taxName: string) => {
     );
     return data.data;
 };
-
