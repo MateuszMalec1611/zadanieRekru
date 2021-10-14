@@ -58,11 +58,11 @@ export type Product = {
 };
 
 export type ProductToAdd = {
-    name: string;
-    measure_type: string;
-    category_id: number;
-    tax_id: number;
-    type: 'BASIC';
+    name?: string;
+    measure_type?: string;
+    category_id?: number;
+    tax_id?: number;
+    type?: 'BASIC';
 };
 
 export type Tax = {

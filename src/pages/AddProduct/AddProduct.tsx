@@ -9,10 +9,14 @@ import { ProductsActionType } from 'src/store/Products/Products.types';
 import { SelectedOption, SelectedOptionStrings } from 'src/types/select.types';
 import { measureSelectOptions } from 'src/utils/constants';
 import SelectAsync from 'src/components/SelectAsync/SelectAsync';
+import { FormFieldNames } from 'src/types/form.types';
+import { FormValidationError } from 'src/types/error.types';
+import { translateErrorMessages } from 'src/utils/helpers';
 
 const AddProduct = () => {
     const [productName, setProductName] = useState('');
     const [error, setError] = useState({ isError: false, errorMessage: '' });
+    const [validationErrors, setValidationErrors] = useState<FormValidationError | undefined>();
     const [onSuccess, setOnSuccess] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<SelectedOption>();
     const [selectedTax, setSelectedTax] = useState<SelectedOption>();
@@ -25,33 +29,29 @@ const AddProduct = () => {
     const handleAddProduct = async (event: React.FormEvent) => {
         setOnSuccess(false);
         event.preventDefault();
-        if (
-            !selectedCategory?.value ||
-            productName.trim() === '' ||
-            !selectedTax ||
-            !selectedMeasure
-        ) {
-            setError({ isError: true, errorMessage: 'Wypełnij wszytskie pola' });
-            return;
-        }
 
         try {
             productsDispatch({ type: ProductsActionType.SET_LOADING });
             const newProduct = await addProduct({
                 name: productName,
-                measure_type: selectedMeasure.value,
-                category_id: selectedCategory.value,
-                tax_id: selectedTax.value,
+                measure_type: selectedMeasure?.value,
+                category_id: selectedCategory?.value,
+                tax_id: selectedTax?.value,
                 type: 'BASIC',
             });
 
             productsDispatch({ type: ProductsActionType.ADD_PRODUCT, payload: newProduct });
 
             setError({ isError: false, errorMessage: '' });
-            setSelectedCategory(undefined);
+            setValidationErrors(undefined);
             setOnSuccess(true);
         } catch (err: any) {
+            if (err.response?.status === 422) {
+                return setValidationErrors(err.response?.data);
+            }
             setError({ isError: true, errorMessage: err.message });
+        } finally {
+            productsDispatch({ type: ProductsActionType.SET_LOADING, payload: false });
         }
     };
 
@@ -60,6 +60,11 @@ const AddProduct = () => {
 
     const handleMeasureChange = (selectedOption?: SelectedOptionStrings | null) =>
         setSelectedMeasure(selectedOption!);
+
+    const validateField = (name: string) =>
+        validationErrors?.errors.some((err: { field: string }) => err.field === name);
+    const getError = (name: string) =>
+        validationErrors?.errors.find((err: { field: string }) => err.field === name);
 
     return (
         <Container>
@@ -80,11 +85,16 @@ const AddProduct = () => {
                                     value={productName}
                                     type="text"
                                     placeholder="Wpisz nazwę produktu"
+                                    isInvalid={validateField(FormFieldNames.NAME)}
                                 />
+                                <Form.Control.Feedback type="invalid">
+                                    {translateErrorMessages(getError(FormFieldNames.NAME)?.code)}
+                                </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Nazwa kategorii</Form.Label>
                                 <SelectAsync
+                                    name={FormFieldNames.CATEGORY_ID}
                                     setError={setError}
                                     fetchValues={fetchCategorySelect}
                                     onChangeValue={setSelectedCategory}
@@ -93,6 +103,7 @@ const AddProduct = () => {
                             <Form.Group className="mb-3">
                                 <Form.Label>Podatek zakupu</Form.Label>
                                 <SelectAsync
+                                    name={FormFieldNames.TAX_ID}
                                     setError={setError}
                                     fetchValues={fetchTaxes}
                                     onChangeValue={setSelectedTax}
@@ -101,8 +112,10 @@ const AddProduct = () => {
                             <Form.Group className="mb-3">
                                 <Form.Label>Jednostka miary</Form.Label>
                                 <Select
+                                    name={FormFieldNames.MEASURE_TYPE}
                                     onChange={handleMeasureChange}
                                     options={measureSelectOptions}
+                                    defaultValue={measureSelectOptions[0]}
                                 />
                             </Form.Group>
                             <Button variant="dark" type="submit">

@@ -1,4 +1,4 @@
-import { ErrorType } from "src/types/error.types";
+import { ErrorType } from 'src/types/error.types';
 
 export type ProviderValue = {
     categoriesState: CategoriesState;
@@ -41,11 +41,11 @@ export type SetError = {
 };
 
 export type Category = {
-    id: number;
-    name: string;
-    status: string;
-    uid: string;
-    updated_at: string;
+    id?: number;
+    name?: string;
+    status?: string;
+    uid?: string;
+    updated_at?: string;
 };
 
 export type CategoriesActions =
