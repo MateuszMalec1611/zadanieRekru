@@ -5,7 +5,6 @@ import { editProduct, fetchProduct } from 'src/store/Products/Products.services'
 import PageTitle from 'src/components/PageTitle/PageTitle';
 import { Product, ProductsActionType } from 'src/store/Products/Products.types';
 import AsyncSelect from 'react-select/async';
-import { Category } from 'src/store/Categories/Categories.types';
 import { fetchCategorySelect } from 'src/store/Categories/Categories.services';
 import { formatDataForSelect } from 'src/utils/helpers';
 import { useProducts } from 'src/hooks/useProducts';
@@ -74,8 +73,8 @@ const EditProduct = () => {
     const handleNameInput = ({ target }: React.ChangeEvent<HTMLInputElement>) =>
         setProductName(target.value);
 
-    const handleCategoryChange = (selectedOptions?: SelectedOption | null) =>
-        setSelectedCategory(selectedOptions!);
+    const handleCategoryChange = (selectedOption?: SelectedOption | null) =>
+        setSelectedCategory(selectedOption!);
 
     useEffect(() => {
         getProduct();

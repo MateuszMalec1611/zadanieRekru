@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { Col, Container, ListGroup, Row, Spinner } from 'react-bootstrap';
+import { useProducts } from 'src/hooks/useProducts';
 import PageTitle from 'src/components/PageTitle/PageTitle';
 import Product from 'src/components/Product/Product';
-import { useProducts } from 'src/hooks/useProducts';
 
 interface ProductListProps {
     editOption?: boolean;

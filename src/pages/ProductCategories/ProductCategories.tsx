@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { Col, Container, ListGroup, Row, Spinner } from 'react-bootstrap';
+import { useCategories } from 'src/hooks/useCategories';
 import Category from 'src/components/Category/Category';
 import PageTitle from 'src/components/PageTitle/PageTitle';
-import { useCategories } from 'src/hooks/useCategories';
 
 const ProductCategories = () => {
     const {

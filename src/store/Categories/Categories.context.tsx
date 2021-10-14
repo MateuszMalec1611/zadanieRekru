@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useEffect, useReducer } from 'react';
+import React, { createContext, useCallback, useReducer } from 'react';
 import { fetchCategories } from './Categories.services';
 import {
     CategoriesActions,

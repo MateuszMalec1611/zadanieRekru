@@ -1,23 +1,15 @@
 import React, { useState } from 'react';
 import { Col, Container, Form, Row, Button, Spinner, Alert } from 'react-bootstrap';
-import PageTitle from 'src/components/PageTitle/PageTitle';
+import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
-import Select, {
-    GetOptionValue,
-    GroupBase,
-    OptionContext,
-    OptionProps,
-    Options,
-} from 'react-select';
-import { fetchCategorySelect } from 'src/store/Categories/Categories.services';
-import { Category } from 'src/store/Categories/Categories.types';
-import { addProduct, fetchTaxes } from 'src/store/Products/Products.services';
-import { Product, ProductsActionType, ProductToAdd } from 'src/store/Products/Products.types';
 import { useProducts } from 'src/hooks/useProducts';
+import PageTitle from 'src/components/PageTitle/PageTitle';
+import { fetchCategorySelect } from 'src/store/Categories/Categories.services';
+import { addProduct, fetchTaxes } from 'src/store/Products/Products.services';
+import { ProductsActionType, ProductToAdd } from 'src/store/Products/Products.types';
 import { SelectedOption, SelectedOptionStrings } from 'src/types/select.types';
 import { formatDataForSelect } from 'src/utils/helpers';
 import { taxSelectOptions } from 'src/utils/constants';
-import reactSelectCjs from 'react-select';
 
 const AddProduct = () => {
     const [productName, setProductName] = useState('');
@@ -76,12 +68,12 @@ const AddProduct = () => {
     const handleProductNameInput = ({ target }: React.ChangeEvent<HTMLInputElement>) =>
         setProductName(target.value);
 
-    const handleCategoryChange = (selectedOptions?: SelectedOption | null) =>
-        setSelectedCategory(selectedOptions!);
-    const handleTaxChange = (selectedOptions?: SelectedOption | null) =>
-        setSelectedTax(selectedOptions!);
-    const handleMeasureChange = (selectedOptions?: SelectedOptionStrings | null) =>
-        setSelectedMeasure(selectedOptions!);
+    const handleCategoryChange = (selectedOption?: SelectedOption | null) =>
+        setSelectedCategory(selectedOption!);
+    const handleTaxChange = (selectedOption?: SelectedOption | null) =>
+        setSelectedTax(selectedOption!);
+    const handleMeasureChange = (selectedOption?: SelectedOptionStrings | null) =>
+        setSelectedMeasure(selectedOption!);
 
     return (
         <Container>
