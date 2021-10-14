@@ -15,7 +15,7 @@ type ParamsProps = {
 const EditCategory = () => {
     const [categoryName, setCategoryName] = useState('');
     const [category, setCategory] = useState<Category>();
-    const [success, setSuccess] = useState(false);
+    const [onSuccess, setOnSuccess] = useState(false);
     const { id } = useParams<ParamsProps>();
     const categoryId = +id;
     const {
@@ -42,17 +42,17 @@ const EditCategory = () => {
 
     const handleEditCategory = async (event: React.FormEvent) => {
         event.preventDefault();
-        setSuccess(false);
+        setOnSuccess(false);
         if (categoryName.trim() === '') return;
         if (!category) return;
 
         try {
             categoriesDispatch({ type: CategoriesActionType.SET_LOADING });
-
             const updatedCategory = await editCategory({
                 ...category,
                 name: categoryName,
             });
+            
             categoriesDispatch({
                 type: CategoriesActionType.UPDATE_CATEGORY,
                 payload: updatedCategory,
@@ -61,7 +61,7 @@ const EditCategory = () => {
                 type: ProductsActionType.UPDATE_PRODUCT_CATEGORY,
                 payload: updatedCategory,
             });
-            setSuccess(true);
+            setOnSuccess(true);
         } catch (err) {
             alert(err);
         }
@@ -98,7 +98,7 @@ const EditCategory = () => {
                             <Button variant="dark" type="submit">
                                 Zapisz
                             </Button>
-                            {success && (
+                            {onSuccess && (
                                 <Alert className="mt-4 text-center" variant="success">
                                     Pomyślnie zaktualizowana kategoria
                                 </Alert>

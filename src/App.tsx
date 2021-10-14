@@ -1,4 +1,3 @@
-import './App.css';
 import { Route, Switch } from 'react-router-dom';
 import NoMatch from './pages/NoMatch/NoMatch';
 import Layout from './components/Layout/Layout';

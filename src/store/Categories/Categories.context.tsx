@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useEffect, useReducer } from 'react';
+import React, { createContext, useCallback, useReducer } from 'react';
 import { fetchCategories } from './Categories.services';
 import {
     CategoriesActions,
@@ -18,6 +18,14 @@ const initialState: CategoriesState = {
 
 const reducer = (state: CategoriesState, action: CategoriesActions) => {
     switch (action.type) {
+        case CategoriesActionType.ADD_CATEGORY:
+            let newCategoryList: [] | Category[] = [];
+            if (!!state.categories.length) newCategoryList = [...state.categories, action.payload];
+            return {
+                ...state,
+                categories: newCategoryList,
+                loading: false,
+            };
         case CategoriesActionType.GET_CATEGORIES:
             return {
                 ...state,

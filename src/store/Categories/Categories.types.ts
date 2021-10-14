@@ -10,6 +10,11 @@ export interface CategoriesState {
     error?: Error;
 }
 
+export type AddCategory = {
+    type: CategoriesActionType.ADD_CATEGORY;
+    payload: Category;
+};
+
 export type GetCategories = {
     type: CategoriesActionType.GET_CATEGORIES;
     payload: Category[];
@@ -33,9 +38,10 @@ export type Category = {
     updated_at: string;
 };
 
-export type CategoriesActions = GetCategories | UpdateCategory | SetLoading;
+export type CategoriesActions = AddCategory | GetCategories | UpdateCategory | SetLoading;
 
 export enum CategoriesActionType {
+    ADD_CATEGORY = 'ADD_CATEGORY',
     GET_CATEGORIES = 'GET_CATEGORIES',
     UPDATE_CATEGORY = 'UPDATE_CATEGORY',
     SET_LOADING = 'SET_LOADING',

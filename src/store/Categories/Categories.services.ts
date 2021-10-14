@@ -19,6 +19,14 @@ export const fetchCategorySelect = async (categoryName: string) => {
     return data.data;
 };
 
+export const addCategory = async (category: { name: string }) => {
+    const { data }: AxiosResponse<{ data: Category; error: any[] }> = await api().post(
+        `/product_categories`,
+        category
+    );
+    return data.data;
+};
+
 export const editCategory = async (category: Category) => {
     const { data }: AxiosResponse<{ data: Category; error: any[] }> = await api().put(
         `/product_categories/${category.id}`,
