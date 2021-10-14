@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { SingleValue } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import { Category } from 'src/store/Categories/Categories.types';
@@ -22,8 +21,6 @@ const SelectAsync: React.FC<SelectAsyncProps> = ({
     setError,
     name,
 }) => {
-    const [values, setValues] = useState<SelectOption[] | undefined>();
-
     const searchValues = async (searchValue: string) => {
         try {
             const values = await fetchValues(searchValue);
@@ -31,7 +28,6 @@ const SelectAsync: React.FC<SelectAsyncProps> = ({
                 formatDataForSelect(value)
             );
 
-            setValues(formatedValues);
             return formatedValues;
         } catch (err: any) {
             setError({ isError: true, errorMessage: err.message });
@@ -45,7 +41,7 @@ const SelectAsync: React.FC<SelectAsyncProps> = ({
         <AsyncSelect
             name={name}
             defaultOptions
-            value={selectedValue || values?.[0]}
+            value={selectedValue}
             loadOptions={searchValues}
             onChange={handleValueChange}
         />

@@ -24,7 +24,7 @@ const reducer = (state: CategoriesState, action: CategoriesActions) => {
     switch (action.type) {
         case CategoriesActionType.ADD_CATEGORY:
             let newCategoryList: [] | Category[] = [];
-            if (!!state.categories.length) newCategoryList = [...state.categories, action.payload];
+            if (state.areDownloaded) newCategoryList = [...state.categories, action.payload];
             return {
                 ...state,
                 categories: newCategoryList,

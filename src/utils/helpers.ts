@@ -17,6 +17,12 @@ export const translateErrorMessages = (code?: string) => {
             return 'Podana nazwa już istnieje';
         case 'name_product_with_name_exists':
             return 'Podana nazwa już istnieje';
+        case 'tax_id_constraints.not_null':
+            return 'Wybierz podatek';
+        case 'measure_type_must_not_be_null':
+            return 'Wybierz jednostkę miary';
+        case 'category_id_must_not_be_null':
+            return 'Wybierz kategorie';
         default:
             break;
     }

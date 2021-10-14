@@ -86,11 +86,14 @@ const AddProduct = () => {
                                     value={productName}
                                     type="text"
                                     placeholder="Wpisz nazwę produktu"
-                                    isInvalid={validateField(FormFieldNames.NAME)}
                                 />
-                                <Form.Control.Feedback type="invalid">
-                                    {translateErrorMessages(getError(FormFieldNames.NAME)?.code)}
-                                </Form.Control.Feedback>
+                                {validateField(FormFieldNames.NAME) && (
+                                    <p className="mb-0 mt-1 fs-6 text-danger">
+                                        {translateErrorMessages(
+                                            getError(FormFieldNames.NAME)?.code
+                                        )}
+                                    </p>
+                                )}
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Nazwa kategorii</Form.Label>
@@ -99,7 +102,15 @@ const AddProduct = () => {
                                     setError={setError}
                                     fetchValues={fetchCategorySelect}
                                     onChangeValue={setSelectedCategory}
+                                    selectedValue={selectedCategory}
                                 />
+                                {validateField(FormFieldNames.CATEGORY_ID) && (
+                                    <p className="mb-0 mt-1 fs-6 text-danger">
+                                        {translateErrorMessages(
+                                            getError(FormFieldNames.CATEGORY_ID)?.code
+                                        )}
+                                    </p>
+                                )}
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Podatek zakupu</Form.Label>
@@ -108,7 +119,15 @@ const AddProduct = () => {
                                     setError={setError}
                                     fetchValues={fetchTaxes}
                                     onChangeValue={setSelectedTax}
+                                    selectedValue={selectedTax}
                                 />
+                                {validateField(FormFieldNames.TAX_ID) && (
+                                    <p className="mb-0 mt-1 fs-6 text-danger">
+                                        {translateErrorMessages(
+                                            getError(FormFieldNames.TAX_ID)?.code
+                                        )}
+                                    </p>
+                                )}
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Jednostka miary</Form.Label>
@@ -116,8 +135,15 @@ const AddProduct = () => {
                                     name={FormFieldNames.MEASURE_TYPE}
                                     onChange={handleMeasureChange}
                                     options={measureSelectOptions}
-                                    defaultValue={measureSelectOptions[0]}
+                                    value={selectedMeasure}
                                 />
+                                {validateField(FormFieldNames.MEASURE_TYPE) && (
+                                    <p className="mb-0 mt-1 fs-6 text-danger">
+                                        {translateErrorMessages(
+                                            getError(FormFieldNames.MEASURE_TYPE)?.code
+                                        )}
+                                    </p>
+                                )}
                             </Form.Group>
                             <Button variant="dark" type="submit">
                                 Zapisz
