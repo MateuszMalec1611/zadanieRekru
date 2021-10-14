@@ -12,6 +12,14 @@ export const fetchProduct = async (id: number) => {
     return data;
 };
 
+export const addProduct = async (product: ProductToAdd) => {
+    const { data }: AxiosResponse<{ data: Product; error: any[] }> = await api().post(
+        `/products`,
+        product
+    );
+    return data.data;
+};
+
 export const editProduct = async (product: Product) => {
     const { data }: AxiosResponse<{ data: Product; error: any[] }> = await api().put(
         `/products/${product.id}`,
@@ -27,10 +35,3 @@ export const fetchTaxes = async (taxName: string) => {
     return data.data;
 };
 
-export const addProduct = async (product: ProductToAdd) => {
-    const { data }: AxiosResponse<{ data: Product; error: any[] }> = await api().post(
-        `/products`,
-        product
-    );
-    return data.data;
-};

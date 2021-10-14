@@ -6,7 +6,7 @@ import { useProducts } from 'src/hooks/useProducts';
 import PageTitle from 'src/components/PageTitle/PageTitle';
 import { fetchCategorySelect } from 'src/store/Categories/Categories.services';
 import { addProduct, fetchTaxes } from 'src/store/Products/Products.services';
-import { ProductsActionType, ProductToAdd } from 'src/store/Products/Products.types';
+import { ProductsActionType } from 'src/store/Products/Products.types';
 import { SelectedOption, SelectedOptionStrings } from 'src/types/select.types';
 import { formatDataForSelect } from 'src/utils/helpers';
 import { taxSelectOptions } from 'src/utils/constants';
@@ -16,7 +16,7 @@ const AddProduct = () => {
     const [selectedCategory, setSelectedCategory] = useState<SelectedOption>();
     const [selectedTax, setSelectedTax] = useState<SelectedOption>();
     const [selectedMeasure, setSelectedMeasure] = useState<SelectedOptionStrings>();
-    const [success, setSuccess] = useState(false);
+    const [onSuccess, setOnSuccess] = useState(false);
     const {
         productsState: { loading },
         productsDispatch,
@@ -35,7 +35,7 @@ const AddProduct = () => {
     };
 
     const handleAddProduct = async (event: React.FormEvent) => {
-        setSuccess(false);
+        setOnSuccess(false);
         event.preventDefault();
         if (
             !selectedCategory?.value ||
@@ -47,19 +47,18 @@ const AddProduct = () => {
 
         try {
             productsDispatch({ type: ProductsActionType.SET_LOADING });
-            const newProduct: ProductToAdd = {
+            const newProduct = await addProduct({
                 name: productName,
                 measure_type: selectedMeasure.value,
                 category_id: selectedCategory.value,
                 tax_id: selectedTax.value,
                 type: 'BASIC',
-            };
+            });
 
-            const product = await addProduct(newProduct);
-            productsDispatch({ type: ProductsActionType.ADD_PRODUCT, payload: product });
+            productsDispatch({ type: ProductsActionType.ADD_PRODUCT, payload: newProduct });
 
             setSelectedCategory(undefined);
-            setSuccess(true);
+            setOnSuccess(true);
         } catch (err) {
             alert(err);
         }
@@ -121,7 +120,7 @@ const AddProduct = () => {
                             <Button variant="dark" type="submit">
                                 Zapisz
                             </Button>
-                            {success && (
+                            {onSuccess && (
                                 <Alert className="mt-4 text-center" variant="success">
                                     Pomyślnie dodano produkt
                                 </Alert>

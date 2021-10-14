@@ -18,7 +18,7 @@ const EditProduct = () => {
     const [productName, setProductName] = useState('');
     const [product, setProduct] = useState<Product>();
     const [selectedCategory, setSelectedCategory] = useState<SelectedOption>();
-    const [success, setSuccess] = useState(false);
+    const [onSuccess, setOnSuccess] = useState(false);
     const {
         productsState: { loading },
         productsDispatch,
@@ -51,7 +51,7 @@ const EditProduct = () => {
 
     const handleEditProduct = async (event: React.FormEvent) => {
         event.preventDefault();
-        setSuccess(false);
+        setOnSuccess(false);
         if (!product) return;
         if (!selectedCategory?.value || productName.trim() === '') return;
 
@@ -64,7 +64,7 @@ const EditProduct = () => {
             });
 
             productsDispatch({ type: ProductsActionType.UPDATE_PRODUCT, payload: updatedProduct });
-            setSuccess(true);
+            setOnSuccess(true);
         } catch (err) {
             alert(err);
         }
@@ -114,7 +114,7 @@ const EditProduct = () => {
                             <Button variant="dark" type="submit">
                                 Zapisz
                             </Button>
-                            {success && (
+                            {onSuccess && (
                                 <Alert className="mt-4 text-center" variant="success">
                                     Pomyślnie zaktualizowano produkt
                                 </Alert>
