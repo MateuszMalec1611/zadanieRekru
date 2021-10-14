@@ -17,3 +17,14 @@ body {
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
+
+.nav {
+    width: 63px;
+}
+
+@media (min-width: 768px) {
+    .nav {
+        width: 100%;
+        max-width: 240px;
+    }
+}
