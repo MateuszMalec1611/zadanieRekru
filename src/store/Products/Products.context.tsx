@@ -17,6 +17,7 @@ const initialState: ProductsState = {
         isError: false,
         errorMessage: '',
     },
+    areDownloaded: false,
 };
 
 const reducer = (state: ProductsState, action: ProductsActions) => {
@@ -29,6 +30,7 @@ const reducer = (state: ProductsState, action: ProductsActions) => {
                 products: newProductList,
                 loading: false,
                 error: { isError: false, errorMessage: '' },
+                areDownloaded: true,
             };
         case ProductsActionType.SET_PRODUCTS:
             return {

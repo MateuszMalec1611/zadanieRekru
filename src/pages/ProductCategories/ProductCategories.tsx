@@ -10,6 +10,7 @@ const ProductCategories = () => {
             categories,
             loading,
             error: { isError, errorMessage },
+            areDownloaded,
         },
         getCategories,
     } = useCategories();
@@ -19,10 +20,10 @@ const ProductCategories = () => {
     ));
 
     useEffect(() => {
-        if (!categories.length) {
+        if (!areDownloaded) {
             getCategories();
         }
-    }, [categories, getCategories]);
+    }, [areDownloaded, getCategories]);
 
     return (
         <Container>

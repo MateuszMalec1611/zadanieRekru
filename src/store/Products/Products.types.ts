@@ -11,6 +11,7 @@ export interface ProductsState {
     products: Product[];
     loading: boolean;
     error: ErrorType;
+    areDownloaded: boolean;
 }
 
 export type AddProduct = {

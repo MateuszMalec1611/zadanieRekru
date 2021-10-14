@@ -10,6 +10,7 @@ const ProductList = () => {
             products,
             loading,
             error: { isError, errorMessage },
+            areDownloaded,
         },
         getProducts,
     } = useProducts();
@@ -17,10 +18,10 @@ const ProductList = () => {
     const productsList = products.map(product => <Product key={product.uid} product={product} />);
 
     useEffect(() => {
-        if (!products.length) {
+        if (!areDownloaded) {
             getProducts();
         }
-    }, [products, getProducts]);
+    }, [areDownloaded, getProducts]);
 
     return (
         <Container>
