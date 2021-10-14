@@ -29,8 +29,7 @@ const EditProduct = () => {
 
     const getProduct = useCallback(async () => {
         try {
-            productsDispatch({ type: ProductsActionType.SET_LOADING });
-
+            productsDispatch({ type: ProductsActionType.SET_LOADING });       
             const { data } = await fetchProduct(productId);
             const fetchedProduct: Product = data;
 
@@ -48,7 +47,10 @@ const EditProduct = () => {
         event.preventDefault();
         setOnSuccess(false);
         if (!product) return;
-        if (!selectedCategory?.value || productName.trim() === '') return;
+        if (!selectedCategory?.value || productName.trim() === '') {
+            setError({ isError: true, errorMessage: 'Nazwa musi być dłuższa niz jeden znak' });
+            return;
+        }
 
         try {
             productsDispatch({ type: ProductsActionType.SET_LOADING });
