@@ -1,9 +1,9 @@
 import { Image, Nav } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import product from 'src/img/product.svg';
-import category from 'src/img/category.svg';
-import addProduct from 'src/img/addProduct.svg';
-import addCategory from 'src/img/addCategory.svg';
+import productIco from 'src/img/product.svg';
+import categoryIco from 'src/img/category.svg';
+import addProductIco from 'src/img/addProduct.svg';
+import addCategoryIco from 'src/img/addCategory.svg';
 
 const Sidebar = () => (
     <>
@@ -11,7 +11,7 @@ const Sidebar = () => (
             <LinkContainer to="/" className="border-bottom ">
                 <Nav.Link className="text-light ">
                     <div className="d-flex align-items-center">
-                        <Image className="me-2" src={product} />
+                        <Image className="me-2" src={productIco} />
                         <p className="m-0 d-none d-md-block">Produkty</p>
                     </div>
                 </Nav.Link>
@@ -19,7 +19,7 @@ const Sidebar = () => (
             <LinkContainer to="/product-categories" className="border-bottom">
                 <Nav.Link className="text-light ">
                     <div className="d-flex align-items-center">
-                        <Image className="me-2" src={category} />
+                        <Image className="me-2" src={categoryIco} />
                         <p className="m-0 d-none d-md-block">Kategorie</p>
                     </div>
                 </Nav.Link>
@@ -27,7 +27,7 @@ const Sidebar = () => (
             <LinkContainer to="/add-product" className="border-bottom ">
                 <Nav.Link className="text-light ">
                     <div className="d-flex align-items-center">
-                        <Image className="me-2" src={addProduct} />
+                        <Image className="me-2" src={addProductIco} />
                         <p className="m-0 d-none d-none d-md-block">Dodaj Produkt</p>
                     </div>
                 </Nav.Link>
@@ -35,7 +35,7 @@ const Sidebar = () => (
             <LinkContainer to="/add-category" className="border-bottom ">
                 <Nav.Link className="text-light ">
                     <div className="d-flex align-items-center">
-                        <Image className="me-2" src={addCategory} />
+                        <Image className="me-2" src={addCategoryIco} />
                         <p className="m-0 d-none d-md-block">Dodaj Kategorię</p>
                     </div>
                 </Nav.Link>
