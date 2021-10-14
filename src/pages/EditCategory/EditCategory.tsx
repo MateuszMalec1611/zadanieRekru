@@ -14,6 +14,7 @@ type ParamsProps = {
 
 const EditCategory = () => {
     const [categoryName, setCategoryName] = useState('');
+    const [error, setError] = useState({ isError: false, errorMessage: '' });
     const [category, setCategory] = useState<Category>();
     const [onSuccess, setOnSuccess] = useState(false);
     const { id } = useParams<ParamsProps>();
@@ -33,8 +34,8 @@ const EditCategory = () => {
 
             setCategoryName(fetchedCategory.name);
             setCategory(fetchedCategory);
-        } catch (err) {
-            alert(err);
+        } catch (err: any) {
+            setError({ isError: true, errorMessage: err.message });
         } finally {
             categoriesDispatch({ type: CategoriesActionType.SET_LOADING, payload: false });
         }
@@ -43,7 +44,10 @@ const EditCategory = () => {
     const handleEditCategory = async (event: React.FormEvent) => {
         event.preventDefault();
         setOnSuccess(false);
-        if (categoryName.trim() === '') return;
+        if (categoryName.trim() === '') {
+            setError({ isError: true, errorMessage: 'Nazwa musi być dłuższa niz jeden znak' });
+            return;
+        }
         if (!category) return;
 
         try {
@@ -52,7 +56,7 @@ const EditCategory = () => {
                 ...category,
                 name: categoryName,
             });
-            
+
             categoriesDispatch({
                 type: CategoriesActionType.UPDATE_CATEGORY,
                 payload: updatedCategory,
@@ -61,9 +65,10 @@ const EditCategory = () => {
                 type: ProductsActionType.UPDATE_PRODUCT_CATEGORY,
                 payload: updatedCategory,
             });
+            setError({ isError: false, errorMessage: '' });
             setOnSuccess(true);
-        } catch (err) {
-            alert(err);
+        } catch (err: any) {
+            setError({ isError: true, errorMessage: err.message });
         }
     };
 
@@ -98,9 +103,13 @@ const EditCategory = () => {
                             <Button variant="dark" type="submit">
                                 Zapisz
                             </Button>
-                            {onSuccess && (
-                                <Alert className="mt-4 text-center" variant="success">
-                                    Pomyślnie zaktualizowana kategoria
+                            {(onSuccess || error.isError) && (
+                                <Alert
+                                    className="mt-4 text-center"
+                                    variant={onSuccess ? 'success' : 'danger'}>
+                                    {onSuccess
+                                        ? 'Pomyślnie zaktualizowano kategorie'
+                                        : error.errorMessage}
                                 </Alert>
                             )}
                         </Form>

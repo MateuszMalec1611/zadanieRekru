@@ -4,7 +4,7 @@ import { Product, ProductToAdd, Tax } from './Products.types';
 
 export const fetchProducts = async () => {
     const { data }: AxiosResponse<{ data: Product[]; error: any[] }> = await api().get(
-        '/productdss?include=category'
+        '/products?include=category'
     );
     return data;
 };

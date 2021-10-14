@@ -16,6 +16,7 @@ type ParamsProps = {
 
 const EditProduct = () => {
     const [productName, setProductName] = useState('');
+    const [error, setError] = useState({ isError: false, errorMessage: '' });
     const [product, setProduct] = useState<Product>();
     const [selectedCategory, setSelectedCategory] = useState<SelectedOption>();
     const [onSuccess, setOnSuccess] = useState(false);
@@ -36,8 +37,8 @@ const EditProduct = () => {
             setProductName(fetchedProduct.name);
             setProduct(fetchedProduct);
             setSelectedCategory(formatDataForSelect(fetchedProduct.category));
-        } catch (err) {
-            alert(err);
+        } catch (err: any) {
+            setError({ isError: true, errorMessage: err.message });
         } finally {
             productsDispatch({ type: ProductsActionType.SET_LOADING, payload: false });
         }
@@ -58,9 +59,10 @@ const EditProduct = () => {
             });
 
             productsDispatch({ type: ProductsActionType.UPDATE_PRODUCT, payload: updatedProduct });
+            setError({ isError: false, errorMessage: '' });
             setOnSuccess(true);
-        } catch (err) {
-            alert(err);
+        } catch (err: any) {
+            setError({ isError: true, errorMessage: err.message });
         }
     };
 
@@ -95,6 +97,7 @@ const EditProduct = () => {
                             <Form.Group className="mb-3">
                                 <Form.Label>Nazwa kategorii</Form.Label>
                                 <SelectAsync
+                                    setError={setError}
                                     selectedValue={selectedCategory}
                                     fetchValues={fetchCategorySelect}
                                     onChangeValue={setSelectedCategory}
@@ -103,9 +106,13 @@ const EditProduct = () => {
                             <Button variant="dark" type="submit">
                                 Zapisz
                             </Button>
-                            {onSuccess && (
-                                <Alert className="mt-4 text-center" variant="success">
-                                    Pomyślnie zaktualizowano produkt
+                            {(onSuccess || error.isError) && (
+                                <Alert
+                                    className="mt-4 text-center"
+                                    variant={onSuccess ? 'success' : 'danger'}>
+                                    {onSuccess
+                                        ? 'Pomyślnie zaktualizowano produkt'
+                                        : error.errorMessage}
                                 </Alert>
                             )}
                         </Form>

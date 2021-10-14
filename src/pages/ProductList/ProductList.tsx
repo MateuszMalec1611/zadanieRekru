@@ -32,17 +32,13 @@ const ProductList: React.FC<ProductListProps> = ({ editOption }) => {
         <Container>
             <PageTitle>Lista produktów</PageTitle>
             <Row>
-                <Col className="d-flex flex-column align-items-center justify-content-center">
-                    {loading && !isError ? (
-                        <Spinner animation="border" />
-                    ) : (
-                        <ListGroup style={{ width: 500 }}>
-                            {products.length === 0 && !isError ? (
-                                <p className="text-center">Brak produktów</p>
-                            ) : (
-                                productsList
-                            )}
-                        </ListGroup>
+                <Col className="d-flex justify-content-center">
+                    {loading && !isError && <Spinner animation="border" />}
+                    {!loading && !isError && !!productsList.length && (
+                        <ListGroup style={{ width: 500 }}>{productsList}</ListGroup>
+                    )}
+                    {!productsList.length && !isError && (
+                        <p className="text-center">Brak produktów</p>
                     )}
                     {isError && <Alert variant="danger">{errorMessage}</Alert>}
                 </Col>
@@ -50,5 +46,6 @@ const ProductList: React.FC<ProductListProps> = ({ editOption }) => {
         </Container>
     );
 };
+//
 
 export default ProductList;

@@ -1,3 +1,4 @@
+import { ErrorType } from 'src/types/error.types';
 import { Category } from '../Categories/Categories.types';
 
 export type ProviderValue = {
@@ -9,10 +10,7 @@ export type ProviderValue = {
 export interface ProductsState {
     products: Product[];
     loading: boolean;
-    error: {
-        isError: boolean;
-        errorMessage: string;
-    };
+    error: ErrorType;
 }
 
 export type AddProduct = {
