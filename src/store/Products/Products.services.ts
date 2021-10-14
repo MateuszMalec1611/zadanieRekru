@@ -3,12 +3,16 @@ import api from 'src/api';
 import { Product, ProductToAdd, Tax } from './Products.types';
 
 export const fetchProducts = async () => {
-    const { data } = await api().get('/products?include=category');
+    const { data }: AxiosResponse<{ data: Product[]; error: any[] }> = await api().get(
+        '/productdss?include=category'
+    );
     return data;
 };
 
 export const fetchProduct = async (id: number) => {
-    const { data } = await api().get(`/products/${id}?include=category`);
+    const { data }: AxiosResponse<{ data: Product; error: any[] }> = await api().get(
+        `/products/${id}?include=category`
+    );
     return data;
 };
 
@@ -34,4 +38,3 @@ export const fetchTaxes = async (taxName: string) => {
     );
     return data.data;
 };
-

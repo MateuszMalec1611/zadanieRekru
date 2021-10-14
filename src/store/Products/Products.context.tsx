@@ -13,7 +13,10 @@ export const ProductsContext = createContext({} as ProviderValue);
 const initialState: ProductsState = {
     products: [],
     loading: false,
-    error: undefined,
+    error: {
+        isError: false,
+        errorMessage: '',
+    },
 };
 
 const reducer = (state: ProductsState, action: ProductsActions) => {
@@ -25,12 +28,14 @@ const reducer = (state: ProductsState, action: ProductsActions) => {
                 ...state,
                 products: newProductList,
                 loading: false,
+                error: { isError: false, errorMessage: '' },
             };
         case ProductsActionType.SET_PRODUCTS:
             return {
                 ...state,
                 products: action.payload,
                 loading: false,
+                error: { isError: false, errorMessage: '' },
             };
         case ProductsActionType.UPDATE_PRODUCT:
             const updatedProducts = state.products.map(product => {
@@ -43,6 +48,7 @@ const reducer = (state: ProductsState, action: ProductsActions) => {
                 ...state,
                 products: updatedProducts,
                 loading: false,
+                error: { isError: false, errorMessage: '' },
             };
         case ProductsActionType.UPDATE_PRODUCT_CATEGORY:
             const updatedProductsCategory = state.products.map(product => {
@@ -58,11 +64,22 @@ const reducer = (state: ProductsState, action: ProductsActions) => {
                 ...state,
                 products: updatedProductsCategory,
                 loading: false,
+                error: { isError: false, errorMessage: '' },
             };
         case ProductsActionType.SET_LOADING:
             return {
                 ...state,
                 loading: action.payload ?? true,
+                error: { isError: false, errorMessage: '' },
+            };
+        case ProductsActionType.SET_ERROR:
+            return {
+                ...state,
+                error: {
+                    isError: action.payload.isError ?? true,
+                    errorMessage: action.payload.errorMessage ?? '',
+                },
+                loading: false,
             };
         default:
             return state;
@@ -80,8 +97,11 @@ const ProductsProvider: React.FC = ({ children }) => {
             const products: Product[] = data;
 
             productsDispatch({ type: ProductsActionType.SET_PRODUCTS, payload: products });
-        } catch (err) {
-            alert(err);
+        } catch (err: any) {
+            productsDispatch({
+                type: ProductsActionType.SET_ERROR,
+                payload: { errorMessage: err.message },
+            });
         }
     }, []);
 

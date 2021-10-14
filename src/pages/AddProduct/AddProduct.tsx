@@ -18,7 +18,10 @@ const AddProduct = () => {
     const [selectedMeasure, setSelectedMeasure] = useState<SelectedOptionStrings>();
     const [onSuccess, setOnSuccess] = useState(false);
     const {
-        productsState: { loading },
+        productsState: {
+            loading,
+            error: { isError, errorMessage },
+        },
         productsDispatch,
     } = useProducts();
 
@@ -59,8 +62,8 @@ const AddProduct = () => {
 
             setSelectedCategory(undefined);
             setOnSuccess(true);
-        } catch (err) {
-            alert(err);
+        } catch (err: any) {
+            productsDispatch({ type: ProductsActionType.SET_ERROR, payload: err.message });
         }
     };
 
@@ -120,9 +123,11 @@ const AddProduct = () => {
                             <Button variant="dark" type="submit">
                                 Zapisz
                             </Button>
-                            {onSuccess && (
-                                <Alert className="mt-4 text-center" variant="success">
-                                    Pomyślnie dodano produkt
+                            {(onSuccess || isError) && (
+                                <Alert
+                                    className="mt-4 text-center"
+                                    variant={onSuccess ? 'success' : 'danger'}>
+                                    {onSuccess ? 'Pomyślnie dodano produkt' : errorMessage}
                                 </Alert>
                             )}
                         </Form>

@@ -9,7 +9,10 @@ export type ProviderValue = {
 export interface ProductsState {
     products: Product[];
     loading: boolean;
-    error?: Error;
+    error: {
+        isError: boolean;
+        errorMessage: string;
+    };
 }
 
 export type AddProduct = {
@@ -35,6 +38,14 @@ export type UpdateProductCategory = {
 export type SetLoading = {
     type: ProductsActionType.SET_LOADING;
     payload?: boolean;
+};
+
+export type SetError = {
+    type: ProductsActionType.SET_ERROR;
+    payload: {
+        isError?: boolean;
+        errorMessage?: string;
+    };
 };
 
 export type Product = {
@@ -66,7 +77,8 @@ export type ProductsActions =
     | SetProducts
     | UpdateProduct
     | UpdateProductCategory
-    | SetLoading;
+    | SetLoading
+    | SetError;
 
 export enum ProductsActionType {
     ADD_PRODUCT = 'ADD_PRODUCT',
@@ -74,4 +86,5 @@ export enum ProductsActionType {
     UPDATE_PRODUCT = 'UPDATE_PRODUCT',
     UPDATE_PRODUCT_CATEGORY = 'UPDATE_PRODUCT_CATEGORY',
     SET_LOADING = 'SET_LOADING',
+    SET_ERROR = 'SET_ERROR',
 }
