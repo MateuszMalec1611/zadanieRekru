@@ -4,13 +4,13 @@ import AsyncSelect from 'react-select/async';
 import { Category } from 'src/store/Categories/Categories.types';
 import { Tax } from 'src/store/Products/Products.types';
 import { ErrorType } from 'src/types/error.types';
-import { SelectedOption } from 'src/types/select.types';
+import { SelectOption } from 'src/types/select.types';
 import { formatDataForSelect } from 'src/utils/helpers';
 
 interface SelectAsyncProps {
-    selectedValue?: SelectedOption;
+    selectedValue?: SelectOption;
     fetchValues: (searchValue: string) => Promise<Tax[] | Category[]>;
-    onChangeValue: (selectedOption: SelectedOption) => void;
+    onChangeValue: (SelectOption: SelectOption) => void;
     setError: (error: ErrorType) => void;
     name?: string;
 }
@@ -22,7 +22,7 @@ const SelectAsync: React.FC<SelectAsyncProps> = ({
     setError,
     name,
 }) => {
-    const [values, setValues] = useState<SelectedOption[] | undefined>();
+    const [values, setValues] = useState<SelectOption[] | undefined>();
 
     const searchValues = async (searchValue: string) => {
         try {
@@ -38,8 +38,8 @@ const SelectAsync: React.FC<SelectAsyncProps> = ({
         }
     };
 
-    const handleValueChange = (selectedOption: SingleValue<SelectedOption>) =>
-        onChangeValue(selectedOption as SelectedOption);
+    const handleValueChange = (SelectOption: SingleValue<SelectOption>) =>
+        onChangeValue(SelectOption as SelectOption);
 
     return (
         <AsyncSelect

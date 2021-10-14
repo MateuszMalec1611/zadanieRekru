@@ -1,12 +1,12 @@
 import { Category } from 'src/store/Categories/Categories.types';
 import { Tax } from 'src/store/Products/Products.types';
-import { SelectedOption } from 'src/types/select.types';
+import { SelectOption } from 'src/types/select.types';
 
 export const formatDataForSelect = (data: Tax | Category) => {
     return {
         label: data?.name || '',
         value: data?.id,
-    } as SelectedOption;
+    } as SelectOption;
 };
 
 export const translateErrorMessages = (code?: string) => {

@@ -6,7 +6,7 @@ import PageTitle from 'src/components/PageTitle/PageTitle';
 import { fetchCategorySelect } from 'src/store/Categories/Categories.services';
 import { addProduct, fetchTaxes } from 'src/store/Products/Products.services';
 import { ProductsActionType } from 'src/store/Products/Products.types';
-import { SelectedOption, SelectedOptionStrings } from 'src/types/select.types';
+import { SelectOption } from 'src/types/select.types';
 import { measureSelectOptions } from 'src/utils/constants';
 import SelectAsync from 'src/components/SelectAsync/SelectAsync';
 import { FormFieldNames } from 'src/types/form.types';
@@ -18,9 +18,9 @@ const AddProduct = () => {
     const [error, setError] = useState({ isError: false, errorMessage: '' });
     const [validationErrors, setValidationErrors] = useState<FormValidationError | undefined>();
     const [onSuccess, setOnSuccess] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState<SelectedOption>();
-    const [selectedTax, setSelectedTax] = useState<SelectedOption>();
-    const [selectedMeasure, setSelectedMeasure] = useState<SelectedOptionStrings>();
+    const [selectedCategory, setSelectedCategory] = useState<SelectOption>();
+    const [selectedTax, setSelectedTax] = useState<SelectOption>();
+    const [selectedMeasure, setSelectedMeasure] = useState<SelectOption>();
     const {
         productsState: { loading },
         productsDispatch,
@@ -34,9 +34,9 @@ const AddProduct = () => {
             productsDispatch({ type: ProductsActionType.SET_LOADING });
             const newProduct = await addProduct({
                 name: productName,
-                measure_type: selectedMeasure?.value,
-                category_id: selectedCategory?.value,
-                tax_id: selectedTax?.value,
+                measure_type: selectedMeasure?.value.toString(),
+                category_id: +selectedCategory?.value!,
+                tax_id: +selectedTax?.value!,
                 type: 'BASIC',
             });
 
@@ -59,8 +59,8 @@ const AddProduct = () => {
     const handleProductNameInput = ({ target }: React.ChangeEvent<HTMLInputElement>) =>
         setProductName(target.value);
 
-    const handleMeasureChange = (selectedOption?: SelectedOptionStrings | null) =>
-        setSelectedMeasure(selectedOption!);
+    const handleMeasureChange = (SelectOption?: SelectOption | null) =>
+        setSelectedMeasure(SelectOption!);
 
     const validateField = (name: string) =>
         validationErrors?.errors.some((err: { field: string }) => err.field === name);

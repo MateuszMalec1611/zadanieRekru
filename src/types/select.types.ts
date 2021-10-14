@@ -1,2 +1,1 @@
-export type SelectedOption = { label: string; value: number };
-export type SelectedOptionStrings = { label: string; value: string };
+export type SelectOption = { label: string; value: number | string };

@@ -7,7 +7,7 @@ import { Product, ProductsActionType } from 'src/store/Products/Products.types';
 import { fetchCategorySelect } from 'src/store/Categories/Categories.services';
 import { formatDataForSelect, translateErrorMessages } from 'src/utils/helpers';
 import { useProducts } from 'src/hooks/useProducts';
-import { SelectedOption } from 'src/types/select.types';
+import { SelectOption } from 'src/types/select.types';
 import SelectAsync from 'src/components/SelectAsync/SelectAsync';
 import { FormValidationError } from 'src/types/error.types';
 import { FormFieldNames } from 'src/types/form.types';
@@ -22,7 +22,7 @@ const EditProduct = () => {
     const [validationErrors, setValidationErrors] = useState<FormValidationError | undefined>();
     const [onSuccess, setOnSuccess] = useState(false);
     const [product, setProduct] = useState<Product>();
-    const [selectedCategory, setSelectedCategory] = useState<SelectedOption>();
+    const [selectedCategory, setSelectedCategory] = useState<SelectOption>();
     const {
         productsState: { loading },
         productsDispatch,
@@ -55,7 +55,7 @@ const EditProduct = () => {
             const updatedProduct = await editProduct({
                 ...product!,
                 name: productName,
-                category_id: selectedCategory?.value,
+                category_id: +selectedCategory?.value!,
             });
 
             productsDispatch({ type: ProductsActionType.UPDATE_PRODUCT, payload: updatedProduct });
