@@ -18,7 +18,7 @@ const Product: React.FC<ProductProps> = ({ product: { name, category, id } }) =>
             <div className="d-flex align-items-center">
                 <p className="m-0 text-uppercase display-7">{categoryName}</p>
                 <Button onClick={handleButton} className="ms-3 text-uppercase" variant="dark">
-                    edit
+                    edytuj
                 </Button>
             </div>
         </ListGroup.Item>
