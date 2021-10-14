@@ -13,7 +13,6 @@ const App = () => {
         <Layout>
             <Switch>
                 <Route component={ProductList} exact path="/" />
-                <Route component={() => <ProductList editOption={true} />} path="/products-list" />
                 <Route component={ProductCategories} path="/product-categories" />
                 <Route component={EditProduct} path="/edit-product/:id" />
                 <Route component={EditCategory} path="/edit-category/:id" />

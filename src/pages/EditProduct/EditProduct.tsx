@@ -17,9 +17,9 @@ type ParamsProps = {
 const EditProduct = () => {
     const [productName, setProductName] = useState('');
     const [error, setError] = useState({ isError: false, errorMessage: '' });
+    const [onSuccess, setOnSuccess] = useState(false);
     const [product, setProduct] = useState<Product>();
     const [selectedCategory, setSelectedCategory] = useState<SelectedOption>();
-    const [onSuccess, setOnSuccess] = useState(false);
     const {
         productsState: { loading },
         productsDispatch,

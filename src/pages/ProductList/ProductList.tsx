@@ -4,11 +4,7 @@ import { useProducts } from 'src/hooks/useProducts';
 import PageTitle from 'src/components/PageTitle/PageTitle';
 import Product from 'src/components/Product/Product';
 
-interface ProductListProps {
-    editOption?: boolean;
-}
-
-const ProductList: React.FC<ProductListProps> = ({ editOption }) => {
+const ProductList = () => {
     const {
         productsState: {
             products,
@@ -18,9 +14,7 @@ const ProductList: React.FC<ProductListProps> = ({ editOption }) => {
         getProducts,
     } = useProducts();
 
-    const productsList = products.map(product => (
-        <Product key={product.uid} editOption={editOption} product={product} />
-    ));
+    const productsList = products.map(product => <Product key={product.uid} product={product} />);
 
     useEffect(() => {
         if (!products.length) {
@@ -37,7 +31,7 @@ const ProductList: React.FC<ProductListProps> = ({ editOption }) => {
                     {!loading && !isError && !!productsList.length && (
                         <ListGroup style={{ width: 500 }}>{productsList}</ListGroup>
                     )}
-                    {!productsList.length && !isError && (
+                    {!loading && !productsList.length && !isError && (
                         <p className="text-center">Brak produktów</p>
                     )}
                     {isError && <Alert variant="danger">{errorMessage}</Alert>}

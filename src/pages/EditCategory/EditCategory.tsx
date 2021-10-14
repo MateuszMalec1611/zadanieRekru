@@ -15,8 +15,8 @@ type ParamsProps = {
 const EditCategory = () => {
     const [categoryName, setCategoryName] = useState('');
     const [error, setError] = useState({ isError: false, errorMessage: '' });
-    const [category, setCategory] = useState<Category>();
     const [onSuccess, setOnSuccess] = useState(false);
+    const [category, setCategory] = useState<Category>();
     const { id } = useParams<ParamsProps>();
     const categoryId = +id;
     const {

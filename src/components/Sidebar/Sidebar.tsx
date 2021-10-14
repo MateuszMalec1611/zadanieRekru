@@ -4,10 +4,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 const Sidebar = () => (
     <>
         <Nav className="col-md-12 flex-column h-100 bg-dark" activeKey="/home">
-            <LinkContainer to="/" className="border-bottom ">
-                <Nav.Link className="text-light">Strona Główna</Nav.Link>
-            </LinkContainer>
-            <LinkContainer to="/products-list" className="border-bottom">
+            <LinkContainer to="/" className="border-bottom">
                 <Nav.Link className="text-light">Produkty</Nav.Link>
             </LinkContainer>
             <LinkContainer to="/product-categories" className="border-bottom">

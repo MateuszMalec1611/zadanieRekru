@@ -33,6 +33,9 @@ const ProductCategories = () => {
                     {!loading && !isError && !!categoriesList.length && (
                         <ListGroup style={{ width: 500 }}>{categoriesList}</ListGroup>
                     )}
+                    {!loading && !categoriesList.length && !isError && (
+                        <p className="text-center">Brak kategorii</p>
+                    )}
                     {isError && <Alert variant="danger">{errorMessage}</Alert>}
                 </Col>
             </Row>

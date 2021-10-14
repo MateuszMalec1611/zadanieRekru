@@ -13,10 +13,10 @@ import SelectAsync from 'src/components/SelectAsync/SelectAsync';
 const AddProduct = () => {
     const [productName, setProductName] = useState('');
     const [error, setError] = useState({ isError: false, errorMessage: '' });
+    const [onSuccess, setOnSuccess] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState<SelectedOption>();
     const [selectedTax, setSelectedTax] = useState<SelectedOption>();
     const [selectedMeasure, setSelectedMeasure] = useState<SelectedOptionStrings>();
-    const [onSuccess, setOnSuccess] = useState(false);
     const {
         productsState: { loading },
         productsDispatch,
