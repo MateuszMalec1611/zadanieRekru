@@ -7,7 +7,7 @@ import { fetchCategorySelect } from 'src/store/Categories/Categories.services';
 import { addProduct, fetchTaxes } from 'src/store/Products/Products.services';
 import { ProductsActionType } from 'src/store/Products/Products.types';
 import { SelectedOption, SelectedOptionStrings } from 'src/types/select.types';
-import { taxSelectOptions } from 'src/utils/constants';
+import { measureSelectOptions } from 'src/utils/constants';
 import SelectAsync from 'src/components/SelectAsync/SelectAsync';
 
 const AddProduct = () => {
@@ -94,7 +94,10 @@ const AddProduct = () => {
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 s<Form.Label>Jednostka miary</Form.Label>
-                                <Select onChange={handleMeasureChange} options={taxSelectOptions} />
+                                <Select
+                                    onChange={handleMeasureChange}
+                                    options={measureSelectOptions}
+                                />
                             </Form.Group>
                             <Button variant="dark" type="submit">
                                 Zapisz
