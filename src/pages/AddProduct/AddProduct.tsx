@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { Col, Container, Form, Row, Button, Spinner, Alert } from 'react-bootstrap';
 import Select from 'react-select';
-import AsyncSelect from 'react-select/async';
 import { useProducts } from 'src/hooks/useProducts';
 import PageTitle from 'src/components/PageTitle/PageTitle';
 import { fetchCategorySelect } from 'src/store/Categories/Categories.services';
 import { addProduct, fetchTaxes } from 'src/store/Products/Products.services';
 import { ProductsActionType } from 'src/store/Products/Products.types';
 import { SelectedOption, SelectedOptionStrings } from 'src/types/select.types';
-import { formatDataForSelect } from 'src/utils/helpers';
-import { taxSelectOptions } from 'src/utils/constants';
+import { measureSelectOptions } from 'src/utils/constants';
+import SelectAsync from 'src/components/SelectAsync/SelectAsync';
 
 const AddProduct = () => {
     const [productName, setProductName] = useState('');
@@ -24,18 +23,6 @@ const AddProduct = () => {
         },
         productsDispatch,
     } = useProducts();
-
-    const searchCategories = async (searchValue: string) => {
-        const categories = await fetchCategorySelect(searchValue);
-
-        return categories.map(category => formatDataForSelect(category));
-    };
-
-    const searchTaxes = async (searchValue: string) => {
-        const taxes = await fetchTaxes(searchValue);
-
-        return taxes.map(tax => formatDataForSelect(tax));
-    };
 
     const handleAddProduct = async (event: React.FormEvent) => {
         setOnSuccess(false);
@@ -70,10 +57,6 @@ const AddProduct = () => {
     const handleProductNameInput = ({ target }: React.ChangeEvent<HTMLInputElement>) =>
         setProductName(target.value);
 
-    const handleCategoryChange = (selectedOption?: SelectedOption | null) =>
-        setSelectedCategory(selectedOption!);
-    const handleTaxChange = (selectedOption?: SelectedOption | null) =>
-        setSelectedTax(selectedOption!);
     const handleMeasureChange = (selectedOption?: SelectedOptionStrings | null) =>
         setSelectedMeasure(selectedOption!);
 
@@ -100,25 +83,24 @@ const AddProduct = () => {
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Nazwa kategorii</Form.Label>
-                                <AsyncSelect
-                                    cacheOptions
-                                    defaultOptions
-                                    loadOptions={searchCategories}
-                                    onChange={handleCategoryChange}
+                                <SelectAsync
+                                    fetchValues={fetchCategorySelect}
+                                    onChangeValue={setSelectedCategory}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3">
                                 <Form.Label>Podatek zakupu</Form.Label>
-                                <AsyncSelect
-                                    cacheOptions
-                                    defaultOptions
-                                    loadOptions={searchTaxes}
-                                    onChange={handleTaxChange}
+                                <SelectAsync
+                                    fetchValues={fetchTaxes}
+                                    onChangeValue={setSelectedTax}
                                 />
                             </Form.Group>
                             <Form.Group className="mb-3">
-                                <Form.Label>Jednostka miary</Form.Label>
-                                <Select onChange={handleMeasureChange} options={taxSelectOptions} />
+                                s<Form.Label>Jednostka miary</Form.Label>
+                                <Select
+                                    onChange={handleMeasureChange}
+                                    options={measureSelectOptions}
+                                />
                             </Form.Group>
                             <Button variant="dark" type="submit">
                                 Zapisz
