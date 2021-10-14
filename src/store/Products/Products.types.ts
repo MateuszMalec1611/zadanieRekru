@@ -66,8 +66,8 @@ export type ProductToAdd = {
 };
 
 export type Tax = {
-    id: 4;
-    name: '0%';
+    id: number;
+    name: string;
 };
 
 export type ProductsActions =

@@ -28,9 +28,8 @@ const EditCategory = () => {
     const getCategory = useCallback(async () => {
         try {
             categoriesDispatch({ type: CategoriesActionType.SET_LOADING });
-            const { data } = await fetchCategory(categoryId);
-            const fetchedCategory: Category = data;
-
+            const fetchedCategory = await fetchCategory(categoryId);
+            
             setCategoryName(fetchedCategory.name);
             setCategory(fetchedCategory);
         } catch (err: any) {
