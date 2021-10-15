@@ -75,8 +75,7 @@ const CategoriesProvider: React.FC = ({ children }) => {
         try {
             categoriesDispatch({ type: CategoriesActionType.SET_LOADING });
 
-            const { data } = await fetchCategories();
-            const categories: Category[] = data;
+            const categories = await fetchCategories();
 
             categoriesDispatch({ type: CategoriesActionType.SET_CATEGORIES, payload: categories });
         } catch (err: any) {

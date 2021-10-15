@@ -6,7 +6,7 @@ export const fetchCategories = async () => {
     const { data }: AxiosResponse<{ data: Category[]; error: any[] }> = await api().get(
         '/product_categories'
     );
-    return data;
+    return data.data;
 };
 
 export const fetchCategory = async (id: number) => {

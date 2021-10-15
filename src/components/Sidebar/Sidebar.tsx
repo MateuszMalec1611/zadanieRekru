@@ -12,7 +12,7 @@ const Sidebar = () => (
                 <Nav.Link className="text-light ">
                     <div className="d-flex align-items-center">
                         <Image className="me-2" src={productIco} />
-                        <p className="m-0 d-none d-md-block">Produkty</p>
+                        <p className="m-0 d-none d-md-block nav-link-text">Produkty</p>
                     </div>
                 </Nav.Link>
             </LinkContainer>
@@ -20,7 +20,7 @@ const Sidebar = () => (
                 <Nav.Link className="text-light ">
                     <div className="d-flex align-items-center">
                         <Image className="me-2" src={categoryIco} />
-                        <p className="m-0 d-none d-md-block">Kategorie</p>
+                        <p className="m-0 d-none d-md-block nav-link-text">Kategorie</p>
                     </div>
                 </Nav.Link>
             </LinkContainer>
@@ -28,7 +28,7 @@ const Sidebar = () => (
                 <Nav.Link className="text-light ">
                     <div className="d-flex align-items-center">
                         <Image className="me-2" src={addProductIco} />
-                        <p className="m-0 d-none d-none d-md-block">Dodaj Produkt</p>
+                        <p className="m-0 d-none d-none d-md-block nav-link-text">Dodaj Produkt</p>
                     </div>
                 </Nav.Link>
             </LinkContainer>
@@ -36,7 +36,7 @@ const Sidebar = () => (
                 <Nav.Link className="text-light ">
                     <div className="d-flex align-items-center">
                         <Image className="me-2" src={addCategoryIco} />
-                        <p className="m-0 d-none d-md-block">Dodaj Kategorię</p>
+                        <p className="m-0 d-none d-md-block nav-link-text">Dodaj Kategorię</p>
                     </div>
                 </Nav.Link>
             </LinkContainer>

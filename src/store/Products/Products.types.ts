@@ -63,7 +63,7 @@ export type ProductToAdd = {
     measure_type?: string;
     category_id?: number;
     tax_id?: number;
-    type?: 'BASIC';
+    type?: string;
 };
 
 export type Tax = {

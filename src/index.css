@@ -22,6 +22,14 @@ code {
     width: 63px;
 }
 
+.nav-link-text {
+    transition: padding 0.3s;
+}
+
+.nav-link-text:hover {
+    padding-left: 10px;
+}
+
 @media (min-width: 768px) {
     .nav {
         width: 100%;
